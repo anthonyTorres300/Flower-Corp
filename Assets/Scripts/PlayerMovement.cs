@@ -3,6 +3,8 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 5f;
+    public float smoothSpeed = 0.125f; 
+    public Vector3 cameraOffset = new Vector3(0, 0, -10);
 
     private Rigidbody2D rb;
     private Camera cam;
@@ -13,7 +15,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        cam = Camera.main; 
+        cam = Camera.main;
     }
 
     void Update()
@@ -21,7 +23,6 @@ public class PlayerMovement : MonoBehaviour
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
 
-        // 2. Get Mouse Position in the world
         mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
     }
 
@@ -32,5 +33,15 @@ public class PlayerMovement : MonoBehaviour
         Vector2 lookDir = mousePos - rb.position;
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
         rb.rotation = angle;
+    }
+
+    void LateUpdate()
+    {
+        if (cam != null)
+        {
+            Vector3 desiredPosition = transform.position + cameraOffset;
+            Vector3 smoothedPosition = Vector3.Lerp(cam.transform.position, desiredPosition, smoothSpeed);
+            cam.transform.position = smoothedPosition;
+        }
     }
 }

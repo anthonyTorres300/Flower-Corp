@@ -58,11 +58,21 @@ public class FlowerCollision : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        GameObject splat = Instantiate(flowerPrefab, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
-        splat.GetComponent<SpriteRenderer>().color = flowerColor;
+        if (other.CompareTag("Ground"))
+        {
+            GameObject splat = Instantiate(
+                flowerPrefab,
+                transform.position,
+                Quaternion.Euler(0, 0, Random.Range(0, 360))
+            );
 
-        splat.transform.localScale *= Random.Range(0.8f, 1.5f);
+            var sr = splat.GetComponent<SpriteRenderer>();
+            if (sr != null)
+                sr.color = flowerColor;
 
-        Destroy(gameObject); 
+            splat.transform.localScale *= Random.Range(0.6f, 1.3f);
+
+            Destroy(gameObject);
+        }
     }
 }
