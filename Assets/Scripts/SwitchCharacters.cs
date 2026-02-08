@@ -16,28 +16,32 @@ public class SwitchCharacters : MonoBehaviour
     public Slider healthSlider;
 
     [Header("Player Icon UI")]
-    public Image playerIcon;     // UI image that changes
-    public Sprite myIcon;        // This character's portrait
+    public Image playerIcon;     
+    public Sprite myIcon;        
 
     private Rigidbody2D rb;
     private Camera cam;
     private PlayerHealth health;
 
     private static float lastSwitchTime;
+    private Transform camTransform;
+    public Vector3 cameraOffset = new Vector3(0, 0, -10);
+
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         cam = Camera.main;
+        camTransform = Camera.main.transform;
         health = GetComponent<PlayerHealth>();
 
         UpdateShootingState();
 
-        // If this character starts active, set UI immediately
         if (isActive)
         {
             UpdateHealthUI();
-            UpdatePlayerIcon(); // NEW
+            UpdatePlayerIcon();
+            MoveCameraToMe(); 
         }
     }
 
@@ -71,14 +75,15 @@ public class SwitchCharacters : MonoBehaviour
             otherCharacter.isActive = true;
             otherCharacter.UpdateShootingState();
 
-            // Transfer UI control
             otherCharacter.healthSlider = healthSlider;
             otherCharacter.playerIcon = playerIcon;
 
-            // Update the icon for the new player
-            otherCharacter.UpdatePlayerIcon(); // NEW
+            otherCharacter.UpdatePlayerIcon();
+
+            otherCharacter.MoveCameraToMe();
         }
     }
+
 
     void UpdatePlayerIcon()
     {
@@ -137,4 +142,29 @@ public class SwitchCharacters : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
         }
     }
+
+    void MoveCameraToMe()
+    {
+        if (camTransform != null)
+        {
+            StopAllCoroutines();
+            StartCoroutine(SmoothCameraMove());
+        }
+    }
+
+    System.Collections.IEnumerator SmoothCameraMove()
+    {
+        Vector3 start = camTransform.position;
+        Vector3 target = transform.position + cameraOffset;
+        float t = 0;
+
+        while (t < 1)
+        {
+            t += Time.deltaTime * 6f;
+            camTransform.position = Vector3.Lerp(start, target, t);
+            yield return null;
+        }
+    }
+
+
 }
