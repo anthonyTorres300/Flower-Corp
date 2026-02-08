@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SwitchCharacters : MonoBehaviour
 {
@@ -11,49 +12,88 @@ public class SwitchCharacters : MonoBehaviour
     public SwitchCharacters otherCharacter;
     public MonoBehaviour shootingScript;
 
+    [Header("Health UI")]
+    public Slider healthSlider;
+
+    [Header("Player Icon UI")]
+    public Image playerIcon;     // UI image that changes
+    public Sprite myIcon;        // This character's portrait
+
     private Rigidbody2D rb;
     private Camera cam;
+    private PlayerHealth health;
 
-    // STATIC variable shared by all instances of this script
-    // This tracks the last time a switch happened globally
     private static float lastSwitchTime;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         cam = Camera.main;
+        health = GetComponent<PlayerHealth>();
 
-        // Ensure the shooting script matches the starting state
         UpdateShootingState();
+
+        // If this character starts active, set UI immediately
+        if (isActive)
+        {
+            UpdateHealthUI();
+            UpdatePlayerIcon(); // NEW
+        }
     }
 
     void Update()
     {
-        // Check for Tab input AND if enough time has passed since the last switch (0.2 seconds)
         if (isActive && Input.GetKeyDown(KeyCode.Tab) && Time.time > lastSwitchTime + 0.2f)
         {
             PerformSwitch();
         }
 
-        if (isActive) HandlePlayerInput();
-        else HandleFollowAI();
+        if (isActive)
+        {
+            HandlePlayerInput();
+            UpdateHealthUI();
+        }
+        else
+        {
+            HandleFollowAI();
+        }
     }
 
     void PerformSwitch()
     {
-        // 1. Record the time so the other character doesn't switch back instantly
         lastSwitchTime = Time.time;
 
-        // 2. Turn myself OFF
         isActive = false;
         UpdateShootingState();
 
-        // 3. Turn the other character ON
         if (otherCharacter != null)
         {
             otherCharacter.isActive = true;
             otherCharacter.UpdateShootingState();
+
+            // Transfer UI control
+            otherCharacter.healthSlider = healthSlider;
+            otherCharacter.playerIcon = playerIcon;
+
+            // Update the icon for the new player
+            otherCharacter.UpdatePlayerIcon(); // NEW
         }
+    }
+
+    void UpdatePlayerIcon()
+    {
+        if (playerIcon != null && myIcon != null)
+        {
+            playerIcon.sprite = myIcon;
+        }
+    }
+
+    void UpdateHealthUI()
+    {
+        if (healthSlider == null || health == null) return;
+
+        healthSlider.maxValue = health.maxHealth;
+        healthSlider.value = health.currentHealth;
     }
 
     public void UpdateShootingState()
@@ -70,7 +110,6 @@ public class SwitchCharacters : MonoBehaviour
         float moveY = Input.GetAxisRaw("Vertical");
         Vector2 moveDir = new Vector2(moveX, moveY).normalized;
 
-        // Using linearVelocity for Unity 6 (use .velocity for older versions)
         rb.linearVelocity = moveDir * moveSpeed;
 
         Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
