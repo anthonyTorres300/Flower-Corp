@@ -31,7 +31,10 @@ public class CupidArrow : MonoBehaviour
         if (debuffable != null)
         {
             debuffable.ApplyDebuff(debuffType, debuffDuration);
+            Debug.Log($"Arrow hit {other.name} with {debuffType}");
             Destroy(gameObject);
         }
     }
+
 }
+
