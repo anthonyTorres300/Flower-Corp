@@ -33,7 +33,7 @@ public class Damageable : MonoBehaviour
     {
         currentHealth -= amount;
 
-        Debug.Log($"{gameObject.name} took {amount} damage. Health: {currentHealth}/{maxHealth}");
+        Debug.Log($"[DAMAGE] {gameObject.name} took {amount} damage. Health: {currentHealth}/{maxHealth}");
 
         // Visual feedback
         if (flashOnHit)
@@ -58,7 +58,7 @@ public class Damageable : MonoBehaviour
 
     void Die()
     {
-        Debug.Log($"{gameObject.name} died!");
+        Debug.Log($"[DEATH] {gameObject.name} died");
 
         // Drop items
         if (dropItems.Length > 0 && Random.value <= dropChance)
@@ -80,6 +80,6 @@ public class Damageable : MonoBehaviour
     public void Heal(int amount)
     {
         currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
-        Debug.Log($"{gameObject.name} healed {amount}. Health: {currentHealth}/{maxHealth}");
+        Debug.Log($"[HEAL] {gameObject.name} healed {amount}. Health: {currentHealth}/{maxHealth}");
     }
 }
