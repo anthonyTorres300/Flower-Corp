@@ -3,17 +3,14 @@ using UnityEngine;
 public class CorruptedCupid : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed = 2f;
-    public float zigZagAmplitude = 1.5f;
-    public float zigZagFrequency = 2f;
-    public float chaseRange = 10f;
-    public float minDistanceFromPlayer = 3f;
-
-    [Header("Patrol")]
-    public float patrolDistance = 3f;
+    public float moveSpeed = 2.5f;
+    public float chaseRange = 12f;
+    public float orbitDistance = 4f;
+    public float orbitSpeed = 2f;
+    public float randomMoveInterval = 1.5f;
 
     [Header("Combat")]
-    public float attackRange = 7f;
+    public float attackRange = 8f;
     public float attackCooldown = 2.5f;
     public GameObject arrowPrefab;
     public Transform firePoint;
@@ -28,25 +25,28 @@ public class CorruptedCupid : MonoBehaviour
     public Color normalColor = Color.red;
     public Color convertingColor = Color.pink;
 
-    private enum State { Patrol, Chase, Attack }
-    private State currentState = State.Patrol;
+    private enum State { Idle, Chase, Orbit }
+    private State currentState = State.Idle;
 
-    private Vector2 startPos;
-    private bool movingRight = true;
     private float cooldown;
     private Transform target;
-    private float zigZagTimer;
-    private Damageable damageable;
+    private Rigidbody2D rb;
+    private Vector2 randomDirection;
+    private float randomMoveTimer;
+    private float orbitAngle;
 
     void Start()
     {
-        startPos = transform.position;
+        rb = GetComponent<Rigidbody2D>();
 
-        // Find the active player
+        if (rb != null)
+        {
+            rb.gravityScale = 0;
+        }
+
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         if (players.Length > 0)
         {
-            // Find the active player
             foreach (GameObject player in players)
             {
                 SwitchCharacters sc = player.GetComponent<SwitchCharacters>();
@@ -56,18 +56,19 @@ public class CorruptedCupid : MonoBehaviour
                     break;
                 }
             }
-            // Fallback to first player if no active found
             if (target == null)
                 target = players[0].transform;
         }
-
-        damageable = GetComponent<Damageable>();
 
         if (spriteRenderer == null)
             spriteRenderer = GetComponent<SpriteRenderer>();
 
         if (spriteRenderer != null)
             spriteRenderer.color = normalColor;
+
+        randomDirection = Random.insideUnitCircle.normalized;
+        randomMoveTimer = randomMoveInterval;
+        orbitAngle = Random.Range(0f, 360f);
     }
 
     void Update()
@@ -75,14 +76,13 @@ public class CorruptedCupid : MonoBehaviour
         if (target == null) return;
 
         cooldown -= Time.deltaTime;
-        zigZagTimer += Time.deltaTime;
+        randomMoveTimer -= Time.deltaTime;
 
         float distanceToPlayer = Vector2.Distance(transform.position, target.position);
 
-        // State machine
-        if (distanceToPlayer <= attackRange)
+        if (distanceToPlayer <= orbitDistance * 1.2f)
         {
-            currentState = State.Attack;
+            currentState = State.Orbit;
         }
         else if (distanceToPlayer <= chaseRange)
         {
@@ -90,76 +90,87 @@ public class CorruptedCupid : MonoBehaviour
         }
         else
         {
-            currentState = State.Patrol;
+            currentState = State.Idle;
         }
 
-        // Execute state behavior
         switch (currentState)
         {
-            case State.Patrol:
-                Patrol();
+            case State.Idle:
+                IdleFloat();
                 break;
             case State.Chase:
                 ChasePlayer();
                 break;
-            case State.Attack:
-                AttackPlayer();
+            case State.Orbit:
+                OrbitPlayer();
                 break;
         }
 
-        // Face the player
-        FaceTarget();
+        if (distanceToPlayer <= attackRange && cooldown <= 0f)
+        {
+            Shoot();
+            cooldown = attackCooldown;
+        }
+
+        FaceMovementDirection();
     }
 
-    void Patrol()
+    void IdleFloat()
     {
-        float dir = movingRight ? 1f : -1f;
-        transform.Translate(Vector2.right * dir * moveSpeed * Time.deltaTime, Space.World);
+        if (randomMoveTimer <= 0f)
+        {
+            randomDirection = Random.insideUnitCircle.normalized;
+            randomMoveTimer = randomMoveInterval;
+        }
 
-        if (Vector2.Distance(startPos, transform.position) >= patrolDistance)
-            movingRight = !movingRight;
+        if (rb != null)
+        {
+            rb.linearVelocity = randomDirection * moveSpeed * 0.3f;
+        }
     }
 
     void ChasePlayer()
     {
-        float distanceToPlayer = Vector2.Distance(transform.position, target.position);
+        Vector2 direction = (target.position - transform.position).normalized;
 
-        // Don't get too close
-        if (distanceToPlayer > minDistanceFromPlayer)
+        if (rb != null)
         {
-            Vector2 direction = (target.position - transform.position).normalized;
-
-            // Add zig-zag movement
-            Vector2 perpendicular = new Vector2(-direction.y, direction.x);
-            float zigZag = Mathf.Sin(zigZagTimer * zigZagFrequency) * zigZagAmplitude;
-            Vector2 zigZagOffset = perpendicular * zigZag * Time.deltaTime;
-
-            Vector2 movement = direction * moveSpeed * Time.deltaTime + zigZagOffset;
-            transform.Translate(movement, Space.World);
+            rb.linearVelocity = direction * moveSpeed;
         }
     }
 
-    void AttackPlayer()
+    void OrbitPlayer()
     {
-        float distanceToPlayer = Vector2.Distance(transform.position, target.position);
+        orbitAngle += orbitSpeed * Time.deltaTime * 50f;
 
-        // Keep distance while attacking
-        if (distanceToPlayer < minDistanceFromPlayer)
+        Vector2 toPlayer = (Vector2)(target.position - transform.position);
+        float currentDistance = toPlayer.magnitude;
+
+        Vector2 radialDirection = toPlayer.normalized;
+        float radialSpeed = 0f;
+
+        if (currentDistance < orbitDistance * 0.8f)
         {
-            Vector2 direction = (transform.position - target.position).normalized;
-            transform.Translate(direction * moveSpeed * Time.deltaTime, Space.World);
+            radialSpeed = -moveSpeed;
         }
-        else if (distanceToPlayer > attackRange * 0.8f)
+        else if (currentDistance > orbitDistance * 1.2f)
         {
-            Vector2 direction = (target.position - transform.position).normalized;
-            transform.Translate(direction * moveSpeed * 0.5f * Time.deltaTime, Space.World);
+            radialSpeed = moveSpeed;
         }
 
-        // Shoot
-        if (cooldown <= 0f)
+        Vector2 tangentialDirection = new Vector2(-radialDirection.y, radialDirection.x);
+
+        if (randomMoveTimer <= 0f)
         {
-            Shoot();
-            cooldown = attackCooldown;
+            randomDirection = Random.insideUnitCircle.normalized * 0.3f;
+            randomMoveTimer = randomMoveInterval;
+        }
+
+        Vector2 velocity = radialDirection * radialSpeed + tangentialDirection * moveSpeed + randomDirection * moveSpeed * 0.5f;
+
+        if (rb != null)
+        {
+            rb.linearVelocity = velocity;
         }
     }
 
@@ -177,8 +188,6 @@ public class CorruptedCupid : MonoBehaviour
             arrowScript.Initialize(dir);
             arrowScript.SetDebuff(RandomDebuff());
         }
-
-        Debug.Log($"{gameObject.name} shot arrow at player");
     }
 
     DebuffType RandomDebuff()
@@ -187,29 +196,26 @@ public class CorruptedCupid : MonoBehaviour
         return (DebuffType)roll;
     }
 
-    void FaceTarget()
+    void FaceMovementDirection()
     {
-        if (target == null) return;
-
-        Vector2 direction = target.position - transform.position;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
+        if (rb != null && rb.linearVelocity.magnitude > 0.1f)
+        {
+            float angle = Mathf.Atan2(rb.linearVelocity.y, rb.linearVelocity.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
+        }
     }
 
-    // Called by Lily when she throws a flower at this cupid
     public void ReceiveFlower()
     {
         flowersReceived++;
-        Debug.Log($"{gameObject.name} received flower ({flowersReceived}/{flowersNeededToConvert})");
+        Debug.Log($"[CONVERSION] {gameObject.name} received flower ({flowersReceived}/{flowersNeededToConvert})");
 
-        // Update color to show progress
         if (spriteRenderer != null)
         {
             float t = (float)flowersReceived / flowersNeededToConvert;
             spriteRenderer.color = Color.Lerp(normalColor, convertingColor, t);
         }
 
-        // Convert to friendly
         if (flowersReceived >= flowersNeededToConvert)
         {
             ConvertToFriendly();
@@ -218,24 +224,21 @@ public class CorruptedCupid : MonoBehaviour
 
     void ConvertToFriendly()
     {
-        Debug.Log($"{gameObject.name} converted to friendly cupid!");
+        Debug.Log($"[CONVERSION] {gameObject.name} converted to friendly!");
 
-        // Spawn friendly cupid if prefab exists
         if (friendlyCupidPrefab != null)
         {
             Instantiate(friendlyCupidPrefab, transform.position, Quaternion.identity);
         }
 
-        // Destroy this corrupted cupid
         Destroy(gameObject);
     }
 
-    // Take damage from player attacks
     void OnTriggerEnter2D(Collider2D other)
     {
-        // Check if hit by player bullet
         if (other.CompareTag("PlayerBullet"))
         {
+            Damageable damageable = GetComponent<Damageable>();
             if (damageable != null)
             {
                 damageable.TakeDamage(1);
@@ -243,11 +246,22 @@ public class CorruptedCupid : MonoBehaviour
             Destroy(other.gameObject);
         }
 
-        // Check if hit by flower (for conversion)
         if (other.CompareTag("Flower"))
         {
             ReceiveFlower();
             Destroy(other.gameObject);
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            PlayerHealth health = collision.gameObject.GetComponent<PlayerHealth>();
+            if (health != null)
+            {
+                health.TakeDamage(5);
+            }
         }
     }
 }

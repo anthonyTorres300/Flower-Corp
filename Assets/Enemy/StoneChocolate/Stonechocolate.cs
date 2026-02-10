@@ -1,40 +1,45 @@
 using UnityEngine;
+using System.Collections;
 
 public class StoneChocolate : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed = 2f;
-    public float jumpForce = 5f;
-    public float jumpInterval = 2f;
+    public float chaseRange = 12f;
 
-    [Header("Split Behavior")]
-    public GameObject smallerChocolatePrefab;
-    public int splitCount = 2; // How many pieces it splits into
-    public float splitForce = 3f;
-    public int currentSize = 3; // 3 = large, 2 = medium, 1 = small
-
-    [Header("Combat")]
-    public int damage = 10;
-    public float chaseRange = 8f;
+    [Header("Split Attack")]
+    public float splitRange = 3f; // Distance to trigger split attack
+    public float splitDuration = 0.8f; // How long the split lasts
+    public float splitCooldown = 3f; // Cooldown between splits
+    public float expandScale = 2.5f; // How much bigger it gets
+    public int splitDamage = 10;
 
     [Header("Visual")]
     public SpriteRenderer spriteRenderer;
+    public Color normalColor = Color.white;
+    public Color splitColor = Color.red;
 
     private Transform target;
     private Rigidbody2D rb;
-    private Damageable damageable;
-    private float jumpTimer;
-    private bool isGrounded;
+    private bool isSplitting = false;
+    private float splitCooldownTimer = 0f;
+    private Vector3 originalScale;
+    private Collider2D bodyCollider;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        damageable = GetComponent<Damageable>();
+        bodyCollider = GetComponent<Collider2D>();
+
+        if (rb != null)
+        {
+            rb.gravityScale = 0;
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        }
 
         if (spriteRenderer == null)
             spriteRenderer = GetComponent<SpriteRenderer>();
 
-        // Find active player
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         if (players.Length > 0)
         {
@@ -51,30 +56,26 @@ public class StoneChocolate : MonoBehaviour
                 target = players[0].transform;
         }
 
-        jumpTimer = jumpInterval;
-
-        // Scale based on size
-        transform.localScale = Vector3.one * currentSize * 0.4f;
+        originalScale = transform.localScale;
     }
 
     void Update()
     {
-        if (target == null) return;
+        if (target == null || isSplitting) return;
+
+        splitCooldownTimer -= Time.deltaTime;
 
         float distanceToPlayer = Vector2.Distance(transform.position, target.position);
 
-        // Chase player if in range
-        if (distanceToPlayer <= chaseRange)
+        // Check if should trigger split attack
+        if (distanceToPlayer <= splitRange && splitCooldownTimer <= 0f)
+        {
+            StartCoroutine(SplitAttack());
+        }
+        // Otherwise chase player
+        else if (distanceToPlayer <= chaseRange)
         {
             ChasePlayer();
-        }
-
-        // Jump periodically
-        jumpTimer -= Time.deltaTime;
-        if (jumpTimer <= 0f && isGrounded)
-        {
-            Jump();
-            jumpTimer = jumpInterval;
         }
     }
 
@@ -82,99 +83,98 @@ public class StoneChocolate : MonoBehaviour
     {
         Vector2 direction = (target.position - transform.position).normalized;
 
-        // Only move horizontally
-        rb.linearVelocity = new Vector2(direction.x * moveSpeed, rb.linearVelocity.y);
+        if (rb != null)
+        {
+            rb.linearVelocity = direction * moveSpeed;
+        }
 
         // Flip sprite based on direction
-        if (spriteRenderer != null)
+        if (spriteRenderer != null && direction.x != 0)
         {
             spriteRenderer.flipX = direction.x < 0;
         }
     }
 
-    void Jump()
+    IEnumerator SplitAttack()
     {
-        if (rb != null && isGrounded)
-        {
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-            isGrounded = false;
-        }
-    }
+        isSplitting = true;
+        splitCooldownTimer = splitCooldown;
 
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        // Check if grounded
-        if (collision.gameObject.CompareTag("Ground"))
+        // Stop moving
+        if (rb != null)
         {
-            isGrounded = true;
+            rb.linearVelocity = Vector2.zero;
         }
 
-        // Damage player on contact
-        if (collision.gameObject.CompareTag("Player"))
+        Debug.Log($"[ATTACK] {gameObject.name} starting split attack!");
+
+        // Change color to indicate attack
+        if (spriteRenderer != null)
         {
-            PlayerHealth health = collision.gameObject.GetComponent<PlayerHealth>();
-            if (health != null)
-            {
-                health.TakeDamage(damage);
-                Debug.Log($"{gameObject.name} dealt {damage} damage to player");
-            }
+            spriteRenderer.color = splitColor;
         }
+
+        // Expand body over time
+        float elapsed = 0f;
+        float expandTime = splitDuration * 0.4f;
+
+        while (elapsed < expandTime)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / expandTime;
+            transform.localScale = Vector3.Lerp(originalScale, originalScale * expandScale, t);
+            yield return null;
+        }
+
+        // Hold expanded state
+        yield return new WaitForSeconds(splitDuration * 0.2f);
+
+        // Shrink back
+        elapsed = 0f;
+        while (elapsed < expandTime)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / expandTime;
+            transform.localScale = Vector3.Lerp(originalScale * expandScale, originalScale, t);
+            yield return null;
+        }
+
+        // Restore
+        transform.localScale = originalScale;
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = normalColor;
+        }
+
+        isSplitting = false;
+
+        Debug.Log($"[ATTACK] {gameObject.name} split attack complete!");
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // Take damage from player attacks
         if (other.CompareTag("PlayerBullet"))
         {
+            Damageable damageable = GetComponent<Damageable>();
             if (damageable != null)
             {
                 damageable.TakeDamage(1);
-
-                // Check if dead, then split
-                if (damageable.currentHealth <= 0)
-                {
-                    Split();
-                }
             }
             Destroy(other.gameObject);
         }
     }
 
-    void Split()
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        // Don't split if already smallest size
-        if (currentSize <= 1 || smallerChocolatePrefab == null)
+        if (collision.gameObject.CompareTag("Player"))
         {
-            Destroy(gameObject);
-            return;
-        }
-
-        Debug.Log($"{gameObject.name} splitting into {splitCount} pieces");
-
-        // Spawn smaller pieces
-        for (int i = 0; i < splitCount; i++)
-        {
-            GameObject piece = Instantiate(smallerChocolatePrefab, transform.position, Quaternion.identity);
-
-            // Set smaller size
-            StoneChocolate pieceScript = piece.GetComponent<StoneChocolate>();
-            if (pieceScript != null)
+            PlayerHealth health = collision.gameObject.GetComponent<PlayerHealth>();
+            if (health != null)
             {
-                pieceScript.currentSize = currentSize - 1;
-                pieceScript.target = target;
-            }
-
-            // Add split force in random directions
-            Rigidbody2D pieceRb = piece.GetComponent<Rigidbody2D>();
-            if (pieceRb != null)
-            {
-                float angle = (360f / splitCount) * i + Random.Range(-20f, 20f);
-                Vector2 direction = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
-                pieceRb.AddForce(direction * splitForce, ForceMode2D.Impulse);
+                // Deal more damage if currently splitting
+                int damage = isSplitting ? splitDamage : splitDamage / 2;
+                health.TakeDamage(damage);
             }
         }
-
-        // Destroy original
-        Destroy(gameObject);
     }
 }
