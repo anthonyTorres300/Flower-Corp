@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 3224570470659992257}
   - component: {fileID: 7809984871785530411}
   - component: {fileID: 5535223003923187079}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: MediumChocolate
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
