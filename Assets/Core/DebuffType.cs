@@ -1,6 +1,8 @@
+using UnityEngine;
+
 public enum DebuffType
 {
-    Slow,
-    Charm,
-    Bleed
+    Poison,     // Deals damage over time
+    Stun,       // Prevents movement and actions
+    Confusion   // Reverses or scrambles controls
 }
