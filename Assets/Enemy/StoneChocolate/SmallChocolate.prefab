@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 7450362733873541838}
   - component: {fileID: 8624027533213671057}
   - component: {fileID: 4414248649453865958}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SmallChocolate
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
