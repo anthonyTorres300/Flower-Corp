@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 805493112470878836}
   - component: {fileID: 7203297262640588148}
   - component: {fileID: 8145358281231580796}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: CupidArrow
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
