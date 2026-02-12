@@ -140,6 +140,7 @@ GameObject:
   - component: {fileID: 2303720924414613026}
   - component: {fileID: 7319399928332218815}
   - component: {fileID: 2722730350294329678}
+  - component: {fileID: 3651420534976311718}
   m_Layer: 6
   m_Name: Cosmos
   m_TagString: Player
@@ -387,3 +388,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHealth: 100
   currentHealth: 0
+--- !u!114 &3651420534976311718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8999392173451164276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d0f419919cc6b245bf13aced5e4158b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SwitchCharacters
+  moveSpeed: 5
+  followDistance: 2
+  isActive: 0
+  otherCharacter: {fileID: 0}
+  shootingScript: {fileID: 1420155586325692732}
+  healthSlider: {fileID: 0}
+  playerIcon: {fileID: 0}
+  myIcon: {fileID: -815980554519240943, guid: 919a4b63ccb4640e58ce5f01324d4581, type: 3}
+  cameraOffset: {x: 0, y: 0, z: -10}

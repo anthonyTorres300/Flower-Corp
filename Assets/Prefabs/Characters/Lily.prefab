@@ -160,7 +160,7 @@ MonoBehaviour:
   shootingScript: {fileID: 7831429854406516744}
   healthSlider: {fileID: 0}
   playerIcon: {fileID: 0}
-  myIcon: {fileID: 0}
+  myIcon: {fileID: 21300000, guid: dccd22fafa45d4563a8a670b52b06fd6, type: 3}
   cameraOffset: {x: 0, y: 0, z: -10}
 --- !u!114 &7831429854406516744
 MonoBehaviour:
