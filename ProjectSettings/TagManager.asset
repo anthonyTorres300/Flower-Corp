@@ -4,20 +4,23 @@
 TagManager:
   serializedVersion: 3
   tags:
+  - Ground
   - Enemy
-  - EnemyBullet
   - PlayerBullet
+  - EnemyBullet
+  - AmmoCrate
+  - Flower
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Flowers
   - Water
   - UI
   - Player
-  - Enemy
-  - PlayerProjectile
-  - EnemyProjectile
+  - 
+  - 
+  - 
   - 
   - 
   - 
