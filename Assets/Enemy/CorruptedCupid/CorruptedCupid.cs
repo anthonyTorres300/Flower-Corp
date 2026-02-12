@@ -3,17 +3,20 @@ using UnityEngine;
 public class CorruptedCupid : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed = 2.5f;
-    public float chaseRange = 12f;
-    public float orbitDistance = 4f;
-    public float orbitSpeed = 2f;
+    public float moveSpeed = 4.5f; // Increased from 2.5
+    public float chaseRange = 20f; // Increased from 12
+    public float orbitDistance = 5f;
+    public float orbitSpeed = 3f; // Increased from 2
     public float randomMoveInterval = 1.5f;
 
     [Header("Combat")]
-    public float attackRange = 8f;
+    public float attackRange = 10f; // Increased from 8
     public float attackCooldown = 2.5f;
     public GameObject arrowPrefab;
     public Transform firePoint;
+
+    [Header("Debuff Type")]
+    public DebuffType debuffType = DebuffType.None; // Set at spawn - None means normal arrows
 
     [Header("Conversion")]
     public GameObject friendlyCupidPrefab;
@@ -25,15 +28,14 @@ public class CorruptedCupid : MonoBehaviour
     public Color normalColor = Color.red;
     public Color convertingColor = Color.pink;
 
-    private enum State { Idle, Chase, Orbit }
-    private State currentState = State.Idle;
+    private enum State { Chase, Orbit }
+    private State currentState = State.Chase;
 
     private float cooldown;
     private Transform target;
     private Rigidbody2D rb;
     private Vector2 randomDirection;
     private float randomMoveTimer;
-    private float orbitAngle;
 
     void Start()
     {
@@ -68,7 +70,6 @@ public class CorruptedCupid : MonoBehaviour
 
         randomDirection = Random.insideUnitCircle.normalized;
         randomMoveTimer = randomMoveInterval;
-        orbitAngle = Random.Range(0f, 360f);
     }
 
     void Update()
@@ -80,24 +81,19 @@ public class CorruptedCupid : MonoBehaviour
 
         float distanceToPlayer = Vector2.Distance(transform.position, target.position);
 
+        // Always chase if far, orbit if close
         if (distanceToPlayer <= orbitDistance * 1.2f)
         {
             currentState = State.Orbit;
         }
-        else if (distanceToPlayer <= chaseRange)
+        else
         {
             currentState = State.Chase;
         }
-        else
-        {
-            currentState = State.Idle;
-        }
 
+        // Execute state behavior
         switch (currentState)
         {
-            case State.Idle:
-                IdleFloat();
-                break;
             case State.Chase:
                 ChasePlayer();
                 break;
@@ -106,6 +102,7 @@ public class CorruptedCupid : MonoBehaviour
                 break;
         }
 
+        // Shoot if in range
         if (distanceToPlayer <= attackRange && cooldown <= 0f)
         {
             Shoot();
@@ -113,20 +110,6 @@ public class CorruptedCupid : MonoBehaviour
         }
 
         FaceMovementDirection();
-    }
-
-    void IdleFloat()
-    {
-        if (randomMoveTimer <= 0f)
-        {
-            randomDirection = Random.insideUnitCircle.normalized;
-            randomMoveTimer = randomMoveInterval;
-        }
-
-        if (rb != null)
-        {
-            rb.linearVelocity = randomDirection * moveSpeed * 0.3f;
-        }
     }
 
     void ChasePlayer()
@@ -141,8 +124,6 @@ public class CorruptedCupid : MonoBehaviour
 
     void OrbitPlayer()
     {
-        orbitAngle += orbitSpeed * Time.deltaTime * 50f;
-
         Vector2 toPlayer = (Vector2)(target.position - transform.position);
         float currentDistance = toPlayer.magnitude;
 
@@ -186,14 +167,8 @@ public class CorruptedCupid : MonoBehaviour
         if (arrowScript != null)
         {
             arrowScript.Initialize(dir);
-            arrowScript.SetDebuff(RandomDebuff());
+            arrowScript.SetDebuff(debuffType); // Use assigned debuff type
         }
-    }
-
-    DebuffType RandomDebuff()
-    {
-        int roll = Random.Range(0, 3);
-        return (DebuffType)roll;
     }
 
     void FaceMovementDirection()
