@@ -2118,3 +2118,885 @@ Memory consumption went from 299.5 MB to 294.4 MB.
 Total: 9.664083 ms (FindLiveObjects: 0.413917 ms CreateObjectMapping: 0.249959 ms MarkObjects: 6.134875 ms  DeleteObjects: 2.865166 ms)
 
 Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+[Licensing::Client] Successfully resolved entitlement details
+Thread 0x16b3c3000 may have been prematurely finalized
+- Loaded All Assemblies, in  1.796 seconds
+Refreshing native plugins compatible for Editor in 0.30 ms, found 2 plugins.
+Native extension for OSXStandalone target not found
+[Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] Unable to send message (not connected to server process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.474 seconds
+Domain Reload Profiling: 2273ms
+	BeginReloadAssembly (1009ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (185ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (2ms)
+		CreateAndSetChildDomain (247ms)
+	RebuildCommonClasses (25ms)
+	RebuildNativeTypeToScriptingClass (10ms)
+	initialDomainReloadingComplete (20ms)
+	LoadAllAssembliesAndSetupDomain (735ms)
+		LoadAssemblies (879ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (173ms)
+			TypeCache.Refresh (25ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (133ms)
+			ResolveRequiredComponents (6ms)
+	FinalizeReload (475ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (378ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (2ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (97ms)
+			ProcessInitializeOnLoadAttributes (238ms)
+			ProcessInitializeOnLoadMethodAttributes (37ms)
+			AfterProcessingInitializeOnLoad (0ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (6ms)
+WARNING: Shader Unsupported: 'Universal Render Pipeline/VR/SpatialMapping/Wireframe' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+WARNING: Shader Unsupported: 'Universal Render Pipeline/VR/SpatialMapping/Wireframe' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+Refreshing native plugins compatible for Editor in 0.43 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 17 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6923 unused Assets / (6.2 MB). Loaded Objects now: 7976.
+Memory consumption went from 305.0 MB to 298.8 MB.
+Total: 8.094250 ms (FindLiveObjects: 0.397083 ms CreateObjectMapping: 0.135584 ms MarkObjects: 4.799333 ms  DeleteObjects: 2.762000 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+WARNING: Shader Unsupported: 'Universal Render Pipeline/VR/SpatialMapping/Wireframe' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+WARNING: Shader Unsupported: 'Universal Render Pipeline/VR/SpatialMapping/Wireframe' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+Refreshing native plugins compatible for Editor in 2.27 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 17 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6914 unused Assets / (4.6 MB). Loaded Objects now: 7977.
+Memory consumption went from 300.8 MB to 296.2 MB.
+Total: 26.646625 ms (FindLiveObjects: 0.505917 ms CreateObjectMapping: 0.154333 ms MarkObjects: 22.884042 ms  DeleteObjects: 3.099083 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+[Licensing::Client] Successfully resolved entitlement details
+Thread 0x16b3c3000 may have been prematurely finalized
+- Loaded All Assemblies, in  1.090 seconds
+Refreshing native plugins compatible for Editor in 0.34 ms, found 2 plugins.
+Native extension for OSXStandalone target not found
+[Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] Unable to send message (not connected to server process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.481 seconds
+Domain Reload Profiling: 1573ms
+	BeginReloadAssembly (317ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (50ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (91ms)
+	RebuildCommonClasses (23ms)
+	RebuildNativeTypeToScriptingClass (10ms)
+	initialDomainReloadingComplete (26ms)
+	LoadAllAssembliesAndSetupDomain (715ms)
+		LoadAssemblies (609ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (211ms)
+			TypeCache.Refresh (32ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (165ms)
+			ResolveRequiredComponents (8ms)
+	FinalizeReload (481ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (370ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (1ms)
+			SetLoadedEditorAssemblies (7ms)
+			BeforeProcessingInitializeOnLoad (113ms)
+			ProcessInitializeOnLoadAttributes (211ms)
+			ProcessInitializeOnLoadMethodAttributes (37ms)
+			AfterProcessingInitializeOnLoad (1ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (6ms)
+WARNING: Shader Unsupported: 'Universal Render Pipeline/VR/SpatialMapping/Wireframe' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+WARNING: Shader Unsupported: 'Universal Render Pipeline/VR/SpatialMapping/Wireframe' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+Refreshing native plugins compatible for Editor in 0.39 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 17 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6924 unused Assets / (7.3 MB). Loaded Objects now: 7980.
+Memory consumption went from 308.3 MB to 301.0 MB.
+Total: 9.266125 ms (FindLiveObjects: 0.567500 ms CreateObjectMapping: 0.209042 ms MarkObjects: 5.565500 ms  DeleteObjects: 2.923750 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+Thread 0x16b3c3000 may have been prematurely finalized
+- Loaded All Assemblies, in  0.783 seconds
+Refreshing native plugins compatible for Editor in 0.37 ms, found 2 plugins.
+Native extension for OSXStandalone target not found
+[Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] Unable to send message (not connected to server process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.623 seconds
+Domain Reload Profiling: 1409ms
+	BeginReloadAssembly (290ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (34ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (80ms)
+	RebuildCommonClasses (26ms)
+	RebuildNativeTypeToScriptingClass (9ms)
+	initialDomainReloadingComplete (23ms)
+	LoadAllAssembliesAndSetupDomain (438ms)
+		LoadAssemblies (323ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (201ms)
+			TypeCache.Refresh (14ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (172ms)
+			ResolveRequiredComponents (9ms)
+	FinalizeReload (623ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (478ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (2ms)
+			SetLoadedEditorAssemblies (6ms)
+			BeforeProcessingInitializeOnLoad (144ms)
+			ProcessInitializeOnLoadAttributes (269ms)
+			ProcessInitializeOnLoadMethodAttributes (54ms)
+			AfterProcessingInitializeOnLoad (3ms)
+			EditorAssembliesLoaded (1ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (9ms)
+WARNING: Shader Unsupported: 'Universal Render Pipeline/VR/SpatialMapping/Wireframe' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+WARNING: Shader Unsupported: 'Universal Render Pipeline/VR/SpatialMapping/Wireframe' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+Refreshing native plugins compatible for Editor in 0.46 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 17 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6924 unused Assets / (3.4 MB). Loaded Objects now: 7983.
+Memory consumption went from 314.3 MB to 310.9 MB.
+Total: 17.950000 ms (FindLiveObjects: 0.810125 ms CreateObjectMapping: 0.329208 ms MarkObjects: 13.823500 ms  DeleteObjects: 2.987083 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Import Request.
+  Time since last request: 3486.757783 seconds.
+  path: Assets/Enemy/CorruptedCupid/Corrupted Cupid.prefab
+  artifactKey: Guid(03c6c88132cc14c22bff4d699b74e99a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/CorruptedCupid/Corrupted Cupid.prefab using Guid(03c6c88132cc14c22bff4d699b74e99a) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'cddf40923ff62cdd49f5326c9b2f52e1') in 0.364027375 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 21
+
+========================================================================
+Received Import Request.
+  Time since last request: 102.052931 seconds.
+  path: Assets/Enemy/StoneChocolate/chocolate-bar-icon-pixel-art-illustration-8-bit_749131-3-1093024992.jpg
+  artifactKey: Guid(b38ba372aa68746a1841c42660eeb5af) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/StoneChocolate/chocolate-bar-icon-pixel-art-illustration-8-bit_749131-3-1093024992.jpg using Guid(b38ba372aa68746a1841c42660eeb5af) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '980038231b3900ac95d7839d8460a4be') in 0.434593417 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000578 seconds.
+  path: Assets/Enemy/StoneChocolate/StoneChocolate.prefab
+  artifactKey: Guid(ec24622ebd45c40718d396744aa8ff62) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/StoneChocolate/StoneChocolate.prefab using Guid(ec24622ebd45c40718d396744aa8ff62) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'dd7d7b24dea612e9268e0a6faf23ab3a') in 0.019080666 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 10
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000050 seconds.
+  path: Assets/Enemy/StoneChocolate/SmallChocolate.prefab
+  artifactKey: Guid(dd128706e736c4b2b88c6f87676e0ec4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/StoneChocolate/SmallChocolate.prefab using Guid(dd128706e736c4b2b88c6f87676e0ec4) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'bd290cce21ba379ee8db95988ba13c43') in 0.010016292 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 10
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.640531 seconds.
+  path: Assets/Enemy/DiamondCritter/DiamondCritter.cs
+  artifactKey: Guid(d2ea7999338d942b194451ea8d42f00b) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/DiamondCritter/DiamondCritter.cs using Guid(d2ea7999338d942b194451ea8d42f00b) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: '9f85743a402c477209246d1c2dca41a6') in 0.132601084 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000112 seconds.
+  path: Assets/Enemy/CorruptedCupid/CupidArrow.prefab
+  artifactKey: Guid(0de1aec0ee4de4681ae5d6294423df1f) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/CorruptedCupid/CupidArrow.prefab using Guid(0de1aec0ee4de4681ae5d6294423df1f) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: 'f299f9d30826257fad38d6c0b13beb45') in 0.070570416 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 10
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000045 seconds.
+  path: Assets/Enemy/PlayerDebuffHandler.cs
+  artifactKey: Guid(955353d114a864d75998a548a0e6877c) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/PlayerDebuffHandler.cs using Guid(955353d114a864d75998a548a0e6877c) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: '26d2f64a5cb805b4eaa1fa519d13ee01') in 0.002661375 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000039 seconds.
+  path: Assets/Scripts/Bulletdamage.cs
+  artifactKey: Guid(3018ab9c8cc494f16b68c56ced238760) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Scripts/Bulletdamage.cs using Guid(3018ab9c8cc494f16b68c56ced238760) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: '0e6656ce796b9e547057cacd4196684a') in 0.00179475 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000057 seconds.
+  path: Assets/Enemy/CosmosBullet.prefab
+  artifactKey: Guid(ea10271991daf410a95c97497701228f) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/CosmosBullet.prefab using Guid(ea10271991daf410a95c97497701228f) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: '2252aefe559cb55ec16e48ee89ca3dbb') in 0.005655208 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 9
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000042 seconds.
+  path: Assets/Scripts/PlayerHealth.cs
+  artifactKey: Guid(66a9da0eb520d52469962c773fca6918) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Scripts/PlayerHealth.cs using Guid(66a9da0eb520d52469962c773fca6918) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: '3b37839cd01311066d4645aca284af70') in 0.005683875 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000038 seconds.
+  path: Assets/Enemy/CorruptedCupid/Corrupted Cupid.prefab
+  artifactKey: Guid(03c6c88132cc14c22bff4d699b74e99a) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/CorruptedCupid/Corrupted Cupid.prefab using Guid(03c6c88132cc14c22bff4d699b74e99a) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: 'bbe92c109de180ea8135d9e2a092f7ff') in 0.015126917 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 21
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000052 seconds.
+  path: Assets/Enemy/CorruptedCupid/Enemy.unity
+  artifactKey: Guid(c2f7762fba3214606a1d3ecb6d3d2312) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/CorruptedCupid/Enemy.unity using Guid(c2f7762fba3214606a1d3ecb6d3d2312) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: '9e89d38c5cd32a3b137baf59b2de667c') in 0.008702875 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 1
+
+========================================================================
+Received Import Request.
+  Time since last request: 18.271294 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateTop.jpg
+  artifactKey: Guid(b38ba372aa68746a1841c42660eeb5af) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/StoneChocolate/ChocolateTop.jpg using Guid(b38ba372aa68746a1841c42660eeb5af) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'e38deed1735ad1e9b8830b8d33765efb') in 0.402060208 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.044614 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateTop.jpg
+  artifactKey: Guid(b38ba372aa68746a1841c42660eeb5af) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/StoneChocolate/ChocolateTop.jpg using Guid(b38ba372aa68746a1841c42660eeb5af) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: 'd6f5137126ac915556e90f7758fc78b5') in 0.129545583 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 21.638362 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateTop.jpg
+  artifactKey: Guid(b38ba372aa68746a1841c42660eeb5af) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/StoneChocolate/ChocolateTop.jpg using Guid(b38ba372aa68746a1841c42660eeb5af) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'c3eb8f8318491bf48f42d7554fdfe70f') in 0.075311625 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.450251 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateTop.jpg
+  artifactKey: Guid(b38ba372aa68746a1841c42660eeb5af) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/StoneChocolate/ChocolateTop.jpg using Guid(b38ba372aa68746a1841c42660eeb5af) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: '36f1511bf46e42f69bf2e3f124c46320') in 0.009245791 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 11.653769 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateTop 1.jpg
+  artifactKey: Guid(b3f0eee1733b147279e5195b9ad92309) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/StoneChocolate/ChocolateTop 1.jpg using Guid(b3f0eee1733b147279e5195b9ad92309) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '19cd46acdc0f822409280fff090742c1') in 0.05458775 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.589153 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateTop 1.jpg
+  artifactKey: Guid(b3f0eee1733b147279e5195b9ad92309) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/StoneChocolate/ChocolateTop 1.jpg using Guid(b3f0eee1733b147279e5195b9ad92309) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: 'f7d6240f0b5b07520f6a72109007c98b') in 0.016491334 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 4.841932 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateBottom.jpg
+  artifactKey: Guid(b3f0eee1733b147279e5195b9ad92309) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/StoneChocolate/ChocolateBottom.jpg using Guid(b3f0eee1733b147279e5195b9ad92309) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '0931e0e9a7fd9234bc59a92d16ade8e2') in 0.062428208 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.965028 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateBottom.jpg
+  artifactKey: Guid(b3f0eee1733b147279e5195b9ad92309) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/StoneChocolate/ChocolateBottom.jpg using Guid(b3f0eee1733b147279e5195b9ad92309) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: '46489443152ef246a9a1d2160b565b00') in 0.02159925 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 422.926626 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateBottom.jpg
+  artifactKey: Guid(b3f0eee1733b147279e5195b9ad92309) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/StoneChocolate/ChocolateBottom.jpg using Guid(b3f0eee1733b147279e5195b9ad92309) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'c601d5682fd254b81c4f65a896121f44') in 0.088645167 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.668225 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateBottom.jpg
+  artifactKey: Guid(b3f0eee1733b147279e5195b9ad92309) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/StoneChocolate/ChocolateBottom.jpg using Guid(b3f0eee1733b147279e5195b9ad92309) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: '5c89d12e5acb792d928b109e4d2f6ff1') in 0.025736 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 9.265815 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateTop.jpg
+  artifactKey: Guid(b38ba372aa68746a1841c42660eeb5af) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/StoneChocolate/ChocolateTop.jpg using Guid(b38ba372aa68746a1841c42660eeb5af) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'e4b659954d124af3f8833c67390d8de3') in 0.046089959 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.773591 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateTop.jpg
+  artifactKey: Guid(b38ba372aa68746a1841c42660eeb5af) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/StoneChocolate/ChocolateTop.jpg using Guid(b38ba372aa68746a1841c42660eeb5af) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: '61ca9c66cc2db12767a1e94c2289a8f2') in 0.00832025 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 17.866009 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateTop.jpg
+  artifactKey: Guid(b38ba372aa68746a1841c42660eeb5af) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/StoneChocolate/ChocolateTop.jpg using Guid(b38ba372aa68746a1841c42660eeb5af) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '977c903e6fbd7ce25e89fc247e899e1b') in 0.032845042 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.843659 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateTop.jpg
+  artifactKey: Guid(b38ba372aa68746a1841c42660eeb5af) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/StoneChocolate/ChocolateTop.jpg using Guid(b38ba372aa68746a1841c42660eeb5af) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: 'f299fa697f66e4f44a9f5dd5aa67f5cf') in 0.007439917 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 13.224179 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateBottom.jpg
+  artifactKey: Guid(b3f0eee1733b147279e5195b9ad92309) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/StoneChocolate/ChocolateBottom.jpg using Guid(b3f0eee1733b147279e5195b9ad92309) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'b51c478b6b48ea796a1ea4b72985f977') in 0.066736084 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.735214 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateBottom.jpg
+  artifactKey: Guid(b3f0eee1733b147279e5195b9ad92309) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/StoneChocolate/ChocolateBottom.jpg using Guid(b3f0eee1733b147279e5195b9ad92309) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: '5ce13c5bbe278184f76490f498f7be36') in 0.01076475 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 36.655599 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateBottom.jpg
+  artifactKey: Guid(b3f0eee1733b147279e5195b9ad92309) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/StoneChocolate/ChocolateBottom.jpg using Guid(b3f0eee1733b147279e5195b9ad92309) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'b2b92115a11de3415627c8e12bcfe15b') in 0.048606917 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.785551 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateBottom.jpg
+  artifactKey: Guid(b3f0eee1733b147279e5195b9ad92309) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/StoneChocolate/ChocolateBottom.jpg using Guid(b3f0eee1733b147279e5195b9ad92309) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: '97279512d9144e85a6715fcdac155a19') in 0.007783208 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+[Licensing::Client] Successfully resolved entitlement details
+Thread 0x16b3c3000 may have been prematurely finalized
+- Loaded All Assemblies, in  2.580 seconds
+Refreshing native plugins compatible for Editor in 0.35 ms, found 2 plugins.
+Native extension for OSXStandalone target not found
+[Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] Unable to send message (not connected to server process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.537 seconds
+Domain Reload Profiling: 3121ms
+	BeginReloadAssembly (1496ms)
+		ExecutionOrderSort (1ms)
+		DisableScriptedObjects (293ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (1ms)
+		CreateAndSetChildDomain (458ms)
+	RebuildCommonClasses (28ms)
+	RebuildNativeTypeToScriptingClass (11ms)
+	initialDomainReloadingComplete (55ms)
+	LoadAllAssembliesAndSetupDomain (994ms)
+		LoadAssemblies (1178ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (299ms)
+			TypeCache.Refresh (42ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (235ms)
+			ResolveRequiredComponents (10ms)
+	FinalizeReload (537ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (414ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (2ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (112ms)
+			ProcessInitializeOnLoadAttributes (254ms)
+			ProcessInitializeOnLoadMethodAttributes (41ms)
+			AfterProcessingInitializeOnLoad (1ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (10ms)
+WARNING: Shader Unsupported: 'Universal Render Pipeline/VR/SpatialMapping/Wireframe' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+WARNING: Shader Unsupported: 'Universal Render Pipeline/VR/SpatialMapping/Wireframe' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+Refreshing native plugins compatible for Editor in 0.39 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 17 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6924 unused Assets / (3.8 MB). Loaded Objects now: 8010.
+Memory consumption went from 326.5 MB to 322.7 MB.
+Total: 9.315166 ms (FindLiveObjects: 0.491042 ms CreateObjectMapping: 0.318666 ms MarkObjects: 6.064584 ms  DeleteObjects: 2.440708 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Import Request.
+  Time since last request: 55.721952 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateTop 1.jpg
+  artifactKey: Guid(90c685d5605194cb78908af2a6c98c22) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/StoneChocolate/ChocolateTop 1.jpg using Guid(90c685d5605194cb78908af2a6c98c22) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '6bcdfa73f4138e578f2663d15acdda01') in 0.117568583 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.746126 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateTop 1.jpg
+  artifactKey: Guid(90c685d5605194cb78908af2a6c98c22) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/StoneChocolate/ChocolateTop 1.jpg using Guid(90c685d5605194cb78908af2a6c98c22) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: '7a6976709b983570b4fea1c7b6dec159') in 0.074777042 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 49.350333 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateTop 1.jpg
+  artifactKey: Guid(90c685d5605194cb78908af2a6c98c22) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/StoneChocolate/ChocolateTop 1.jpg using Guid(90c685d5605194cb78908af2a6c98c22) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'd06e72ffcaee61a41951b9bec36bfb89') in 0.142011583 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.450467 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateTop 1.jpg
+  artifactKey: Guid(90c685d5605194cb78908af2a6c98c22) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/StoneChocolate/ChocolateTop 1.jpg using Guid(90c685d5605194cb78908af2a6c98c22) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: 'c64fb8c361de542d488f1497633360f7') in 0.032967542 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+[Licensing::Client] Successfully resolved entitlement details
+Thread 0x16b3c3000 may have been prematurely finalized
+- Loaded All Assemblies, in  1.555 seconds
+Refreshing native plugins compatible for Editor in 0.33 ms, found 2 plugins.
+Native extension for OSXStandalone target not found
+[Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] Unable to send message (not connected to server process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.657 seconds
+Domain Reload Profiling: 2218ms
+	BeginReloadAssembly (737ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (76ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (181ms)
+	RebuildCommonClasses (27ms)
+	RebuildNativeTypeToScriptingClass (10ms)
+	initialDomainReloadingComplete (28ms)
+	LoadAllAssembliesAndSetupDomain (758ms)
+		LoadAssemblies (873ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (204ms)
+			TypeCache.Refresh (29ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (159ms)
+			ResolveRequiredComponents (9ms)
+	FinalizeReload (658ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (518ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (1ms)
+			SetLoadedEditorAssemblies (5ms)
+			BeforeProcessingInitializeOnLoad (133ms)
+			ProcessInitializeOnLoadAttributes (315ms)
+			ProcessInitializeOnLoadMethodAttributes (59ms)
+			AfterProcessingInitializeOnLoad (3ms)
+			EditorAssembliesLoaded (3ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (11ms)
+WARNING: Shader Unsupported: 'Universal Render Pipeline/VR/SpatialMapping/Wireframe' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+WARNING: Shader Unsupported: 'Universal Render Pipeline/VR/SpatialMapping/Wireframe' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+Refreshing native plugins compatible for Editor in 0.48 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 17 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6924 unused Assets / (4.3 MB). Loaded Objects now: 8013.
+Memory consumption went from 333.8 MB to 329.5 MB.
+Total: 24.736166 ms (FindLiveObjects: 2.491083 ms CreateObjectMapping: 1.319875 ms MarkObjects: 17.968875 ms  DeleteObjects: 2.955958 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Import Request.
+  Time since last request: 301.883805 seconds.
+  path: Assets/Enemy/StoneChocolate
+  artifactKey: Guid(c67d6753593f64520b8c525eecc06915) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/StoneChocolate using Guid(c67d6753593f64520b8c525eecc06915) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'f9bbdfa9cd3deae5c312678ca2009bf9') in 0.101536167 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 146.606798 seconds.
+  path: Assets/Enemy/StoneChocolate/CleanShot 2026-02-11 at 20.01.56@2x.png
+  artifactKey: Guid(2f5cf6750e42f485f90f7b0a74fd671e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/StoneChocolate/CleanShot 2026-02-11 at 20.01.56@2x.png using Guid(2f5cf6750e42f485f90f7b0a74fd671e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'ca035b1db33f68c6bc97c91c06b4437a') in 1.3399135 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 118.942513 seconds.
+  path: Assets/Enemy/StoneChocolate/CleanShot 2026-02-11 at 20.05.01@2x.png
+  artifactKey: Guid(997b23c23975543c996e4f09de985431) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/StoneChocolate/CleanShot 2026-02-11 at 20.05.01@2x.png using Guid(997b23c23975543c996e4f09de985431) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '572c6fbdffdf5d8bf227c6815a02261d') in 0.084007542 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.448565 seconds.
+  path: Assets/Enemy/StoneChocolate/CleanShot 2026-02-11 at 20.05.01@2x.png
+  artifactKey: Guid(997b23c23975543c996e4f09de985431) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/StoneChocolate/CleanShot 2026-02-11 at 20.05.01@2x.png using Guid(997b23c23975543c996e4f09de985431) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: 'cadb997dc59325d2f9a70b8e39807bce') in 0.305673375 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000035 seconds.
+  path: Assets/Enemy/StoneChocolate/CleanShot 2026-02-11 at 20.05.46@2x.png
+  artifactKey: Guid(f136c89933c9e4aafa73a8c6ca6c6497) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/StoneChocolate/CleanShot 2026-02-11 at 20.05.46@2x.png using Guid(f136c89933c9e4aafa73a8c6ca6c6497) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: '8f37853f174315c246c6d53e3fe3409c') in 0.007079083 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 5.753780 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateFull.png
+  artifactKey: Guid(2f5cf6750e42f485f90f7b0a74fd671e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/StoneChocolate/ChocolateFull.png using Guid(2f5cf6750e42f485f90f7b0a74fd671e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '55d8ed52c267ba6129b0635e7bfb515a') in 0.037797667 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 6.918917 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateFull.png
+  artifactKey: Guid(2f5cf6750e42f485f90f7b0a74fd671e) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/StoneChocolate/ChocolateFull.png using Guid(2f5cf6750e42f485f90f7b0a74fd671e) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: '3348f2fcb2108a82ec61381783d1fbc8') in 0.007808 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.566792 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateTop.png
+  artifactKey: Guid(997b23c23975543c996e4f09de985431) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/StoneChocolate/ChocolateTop.png using Guid(997b23c23975543c996e4f09de985431) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'c0459bfa367a29560f39584d8f6b87ff') in 0.039143291 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.876265 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateTop.png
+  artifactKey: Guid(997b23c23975543c996e4f09de985431) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/StoneChocolate/ChocolateTop.png using Guid(997b23c23975543c996e4f09de985431) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: '780fe0878c2e05a50bd5ee6eb3b2a326') in 0.02709175 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 7.604950 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateBottom.png
+  artifactKey: Guid(f136c89933c9e4aafa73a8c6ca6c6497) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/StoneChocolate/ChocolateBottom.png using Guid(f136c89933c9e4aafa73a8c6ca6c6497) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'ea87391487dbe724a3ebac75f81f115e') in 0.038578125 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.857276 seconds.
+  path: Assets/Enemy/StoneChocolate/ChocolateBottom.png
+  artifactKey: Guid(f136c89933c9e4aafa73a8c6ca6c6497) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/StoneChocolate/ChocolateBottom.png using Guid(f136c89933c9e4aafa73a8c6ca6c6497) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: '213c3f58d32aa23e7ca415637a3e743f') in 0.0048905 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+[Licensing::Client] Successfully resolved entitlement details
+Thread 0x16b3c3000 may have been prematurely finalized
+- Loaded All Assemblies, in  2.066 seconds
+Refreshing native plugins compatible for Editor in 0.31 ms, found 2 plugins.
+Native extension for OSXStandalone target not found
+[Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] Unable to send message (not connected to server process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.690 seconds
+Domain Reload Profiling: 2765ms
+	BeginReloadAssembly (982ms)
+		ExecutionOrderSort (1ms)
+		DisableScriptedObjects (159ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (2ms)
+		CreateAndSetChildDomain (232ms)
+	RebuildCommonClasses (29ms)
+	RebuildNativeTypeToScriptingClass (10ms)
+	initialDomainReloadingComplete (34ms)
+	LoadAllAssembliesAndSetupDomain (1020ms)
+		LoadAssemblies (945ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (366ms)
+			TypeCache.Refresh (39ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (310ms)
+			ResolveRequiredComponents (9ms)
+	FinalizeReload (691ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (566ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (2ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (155ms)
+			ProcessInitializeOnLoadAttributes (347ms)
+			ProcessInitializeOnLoadMethodAttributes (58ms)
+			AfterProcessingInitializeOnLoad (1ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (10ms)
+WARNING: Shader Unsupported: 'Universal Render Pipeline/VR/SpatialMapping/Wireframe' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+WARNING: Shader Unsupported: 'Universal Render Pipeline/VR/SpatialMapping/Wireframe' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+Refreshing native plugins compatible for Editor in 0.59 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 17 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6924 unused Assets / (3.7 MB). Loaded Objects now: 8022.
+Memory consumption went from 341.4 MB to 337.8 MB.
+Total: 11.843208 ms (FindLiveObjects: 0.591333 ms CreateObjectMapping: 0.758833 ms MarkObjects: 7.313334 ms  DeleteObjects: 3.179125 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Begin MonoManager ReloadAssembly
+Thread 0x16b3c3000 may have been prematurely finalized
+- Loaded All Assemblies, in  1.437 seconds
+Refreshing native plugins compatible for Editor in 0.33 ms, found 2 plugins.
+Native extension for OSXStandalone target not found
+[Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] Unable to send message (not connected to server process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.961 seconds
+Domain Reload Profiling: 2403ms
+	BeginReloadAssembly (566ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (79ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (3ms)
+		CreateAndSetChildDomain (178ms)
+	RebuildCommonClasses (47ms)
+	RebuildNativeTypeToScriptingClass (15ms)
+	initialDomainReloadingComplete (30ms)
+	LoadAllAssembliesAndSetupDomain (784ms)
+		LoadAssemblies (665ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (309ms)
+			TypeCache.Refresh (42ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (248ms)
+			ResolveRequiredComponents (14ms)
+	FinalizeReload (961ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (818ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (2ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (176ms)
+			ProcessInitializeOnLoadAttributes (538ms)
+			ProcessInitializeOnLoadMethodAttributes (95ms)
+			AfterProcessingInitializeOnLoad (2ms)
+			EditorAssembliesLoaded (1ms)
+		ExecutionOrderSort2 (1ms)
+		AwakeInstancesAfterBackupRestoration (17ms)
+WARNING: Shader Unsupported: 'Universal Render Pipeline/VR/SpatialMapping/Wireframe' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+WARNING: Shader Unsupported: 'Universal Render Pipeline/VR/SpatialMapping/Wireframe' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+Refreshing native plugins compatible for Editor in 0.70 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 17 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6924 unused Assets / (3.6 MB). Loaded Objects now: 8025.
+Memory consumption went from 347.3 MB to 343.7 MB.
+Total: 47.714834 ms (FindLiveObjects: 1.043250 ms CreateObjectMapping: 0.644458 ms MarkObjects: 41.521667 ms  DeleteObjects: 4.505167 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Import Request.
+  Time since last request: 355.873206 seconds.
+  path: Assets/Enemy/CorruptedCupid/Corrupted Cupid 1.prefab
+  artifactKey: Guid(fdbf3a24828ac400d8960a0f02f9add6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/CorruptedCupid/Corrupted Cupid 1.prefab using Guid(fdbf3a24828ac400d8960a0f02f9add6) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'da86374757cf656f34e56488b964a9e7') in 0.853606208 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 43
+
+========================================================================
+Received Import Request.
+  Time since last request: 50.006867 seconds.
+  path: Assets/Enemy/CorruptedCupid/Lily.prefab
+  artifactKey: Guid(215eec520b3ea407cb078bf9a0e08f7c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/CorruptedCupid/Lily.prefab using Guid(215eec520b3ea407cb078bf9a0e08f7c) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'de2c8508e33cf3893d7a0b1d68de41a3') in 0.106301917 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 27
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000072 seconds.
+  path: Assets/Enemy/CorruptedCupid/Cosmos.prefab
+  artifactKey: Guid(ad393699577c3429ab6c83125975848f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/CorruptedCupid/Cosmos.prefab using Guid(ad393699577c3429ab6c83125975848f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '3e6f026c678e76a3655146675ae99118') in 0.0091405 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 27
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.600190 seconds.
+  path: Assets/Enemy/CorruptedCupid/Lily.prefab
+  artifactKey: Guid(215eec520b3ea407cb078bf9a0e08f7c) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/CorruptedCupid/Lily.prefab using Guid(215eec520b3ea407cb078bf9a0e08f7c) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: '331868074ad8c5e3c6d3537ce9f59a73') in 0.517498667 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 27
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000084 seconds.
+  path: Assets/Enemy/CorruptedCupid/Cosmos.prefab
+  artifactKey: Guid(ad393699577c3429ab6c83125975848f) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/CorruptedCupid/Cosmos.prefab using Guid(ad393699577c3429ab6c83125975848f) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: '9798b6c6e3704cb23e8ad9921ce7fb59') in 0.010349667 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 27
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000035 seconds.
+  path: Assets/Enemy/CorruptedCupid/Corrupted Cupid.prefab
+  artifactKey: Guid(03c6c88132cc14c22bff4d699b74e99a) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/CorruptedCupid/Corrupted Cupid.prefab using Guid(03c6c88132cc14c22bff4d699b74e99a) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: '58f2c38dfb121297ddfa9e2f97f58fb2') in 0.020603792 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 43
+
+========================================================================
+Received Import Request.
+  Time since last request: 8.725253 seconds.
+  path: Assets/Enemy/DiamondCritter/DiamondCritter.prefab
+  artifactKey: Guid(da2022896fb3745c2b98ce9f8538834d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/DiamondCritter/DiamondCritter.prefab using Guid(da2022896fb3745c2b98ce9f8538834d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '0f7dfc67753841ea48ef803a5d7bab35') in 0.052166375 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 31
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.870586 seconds.
+  path: Assets/Enemy/DiamondCritter/DiamondCritter.prefab
+  artifactKey: Guid(da2022896fb3745c2b98ce9f8538834d) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/DiamondCritter/DiamondCritter.prefab using Guid(da2022896fb3745c2b98ce9f8538834d) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: 'faa8ae3c14781d96195a59562175c226') in 0.007932125 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 31
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.788763 seconds.
+  path: Assets/Enemy/StoneChocolate/StoneChocolate.prefab
+  artifactKey: Guid(ec24622ebd45c40718d396744aa8ff62) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Enemy/StoneChocolate/StoneChocolate.prefab using Guid(ec24622ebd45c40718d396744aa8ff62) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '8ae278bdc57e2697d153627db684bef3') in 0.065406583 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 36
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.872820 seconds.
+  path: Assets/Enemy/StoneChocolate/StoneChocolate.prefab
+  artifactKey: Guid(ec24622ebd45c40718d396744aa8ff62) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/StoneChocolate/StoneChocolate.prefab using Guid(ec24622ebd45c40718d396744aa8ff62) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: 'f3033a4df7945a7835d274d53bc3f54d') in 0.008561333 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 34
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.800046 seconds.
+  path: Assets/Enemy/CorruptedCupid/Enemy.unity
+  artifactKey: Guid(c2f7762fba3214606a1d3ecb6d3d2312) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Enemy/CorruptedCupid/Enemy.unity using Guid(c2f7762fba3214606a1d3ecb6d3d2312) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: '98c341df6e2dd3e2a6ee9aa5293d2d75') in 0.007677125 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 1
+
