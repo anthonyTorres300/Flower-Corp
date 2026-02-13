@@ -17,8 +17,6 @@ public class LilyShooter : MonoBehaviour
     public float flowerSpeed = 18f;
     public Color teamColor = Color.cyan;
     public float fireRate = 0.12f;
-
-    [Tooltip("How far the bullet travels before automatically splashing")]
     public float maxRange = 10f;
 
     [Header("Ammo Stats")]
@@ -69,8 +67,6 @@ public class LilyShooter : MonoBehaviour
         UpdateAmmoUI();
 
         GameObject projGO = Instantiate(flowerProjectilePrefab, firePoint.position, firePoint.rotation);
-
-        // Pass the maxRange to the collision logic
         FlowerCollision projectileLogic = projGO.AddComponent<FlowerCollision>();
         projectileLogic.Setup(splatPrefab, teamColor, firePoint.up * flowerSpeed, maxRange);
     }
@@ -99,7 +95,6 @@ public class FlowerCollision : MonoBehaviour
     private Color _paintColor;
     private float _dropTimer;
     private float _dropInterval = 0.05f;
-
     private Vector2 _startPos;
     private float _maxDistance;
 
@@ -112,15 +107,12 @@ public class FlowerCollision : MonoBehaviour
 
         if (TryGetComponent(out SpriteRenderer sr)) sr.color = color;
 
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        if (rb == null) rb = gameObject.AddComponent<Rigidbody2D>();
-
+        Rigidbody2D rb = GetComponent<Rigidbody2D>() ?? gameObject.AddComponent<Rigidbody2D>();
         rb.gravityScale = 0;
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         rb.linearVelocity = velocity;
 
-        CircleCollider2D col = GetComponent<CircleCollider2D>();
-        if (col == null) col = gameObject.AddComponent<CircleCollider2D>();
+        CircleCollider2D col = GetComponent<CircleCollider2D>() ?? gameObject.AddComponent<CircleCollider2D>();
         col.isTrigger = true;
 
         Destroy(gameObject, 5f);
@@ -128,34 +120,20 @@ public class FlowerCollision : MonoBehaviour
 
     void Update()
     {
-        // 1. Trail logic
         _dropTimer += Time.deltaTime;
-        if (_dropTimer >= _dropInterval)
-        {
-            SpawnPaint(0.45f);
-            _dropTimer = 0;
-        }
+        if (_dropTimer >= _dropInterval) { SpawnPaint(0.45f); _dropTimer = 0; }
 
-        // 2. Range logic: Check distance from start point
-        float distanceTraveled = Vector2.Distance(_startPos, transform.position);
-        if (distanceTraveled >= _maxDistance)
-        {
-            HandleImpact();
-        }
+        if (Vector2.Distance(_startPos, transform.position) >= _maxDistance) HandleImpact();
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // Impact logic for walls/ground
-        if (other.CompareTag("Ground"))
-        {
-            HandleImpact();
-        }
+        if (other.CompareTag("Ground")) HandleImpact();
     }
 
     void HandleImpact()
     {
-        SpawnPaint(1.3f); // Large final splat
+        SpawnPaint(1.3f);
         Destroy(gameObject);
     }
 
@@ -165,12 +143,20 @@ public class FlowerCollision : MonoBehaviour
 
         GameObject splat = Instantiate(_splatPrefab, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
 
+        // --- REGISTRATION SETUP ---
+        // Give the splat a Tag so the player can find it
+        splat.tag = "Ink";
+
+        // Give it a trigger collider so the player can "step" into it
+        CircleCollider2D col = splat.GetComponent<CircleCollider2D>() ?? splat.AddComponent<CircleCollider2D>();
+        col.isTrigger = true;
+        col.radius = 0.5f;
+
         if (splat.TryGetComponent(out SpriteRenderer sr))
         {
             sr.color = _paintColor;
             sr.sortingOrder = -1;
         }
-
         splat.transform.localScale *= Random.Range(0.8f, 1.2f) * scaleMult;
     }
 }
