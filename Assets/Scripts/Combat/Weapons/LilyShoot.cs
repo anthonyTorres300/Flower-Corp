@@ -10,27 +10,26 @@ public class LilyShooter : MonoBehaviour
     public Transform firePoint;
     public Camera cam;
 
-    [Header("UI")]
+    [Header("UI Setup")]
     public Image ammoBar;
 
     [Header("Settings")]
-    public float flowerSpeed = 15f;
-    public Color flowerColor = Color.cyan;
-    public float fireRate = 0.15f;
-    public int damage = 5; // added damage field for cupid bonuses
+    public float flowerSpeed = 18f;
+    public Color teamColor = Color.cyan;
+    public float fireRate = 0.12f;
+    public float maxRange = 10f;
 
-    [Header("Ammo")]
-    public int maxAmmo = 20;
-    public float reloadTime = 1.5f;
+    [Header("Ammo Stats")]
+    public int maxAmmo = 40;
+    public float reloadTime = 1.2f;
 
-    private int currentAmmo;
-    private bool isReloading = false;
-    private float nextFireTime;
-    private SwitchCharacters switchScript;
+    private int _currentAmmo;
+    private float _nextFireTime;
+    private bool _isReloading;
 
     void Start()
     {
-        currentAmmo = maxAmmo;
+        _currentAmmo = maxAmmo;
         if (cam == null) cam = Camera.main;
         switchScript = GetComponent<SwitchCharacters>();
         UpdateAmmoUI();
@@ -38,115 +37,119 @@ public class LilyShooter : MonoBehaviour
 
     void Update()
     {
-        // check if active
-        if (switchScript != null && !switchScript.isActive) return;
+        RotateTowardsMouse();
 
-        UpdateAmmoUI();
+        if (_isReloading) return;
 
-        if (isReloading) return;
-
-        // auto reload
-        if (currentAmmo <= 0)
+        if (Input.GetKeyDown(KeyCode.R) || _currentAmmo <= 0)
         {
             StartCoroutine(Reload());
             return;
         }
 
-        // hold to shoot
-        if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
+        if (Input.GetMouseButton(0) && Time.time >= _nextFireTime)
         {
             Shoot();
-            nextFireTime = Time.time + fireRate;
+            _nextFireTime = Time.time + fireRate;
         }
     }
 
     void Shoot()
     {
-        currentAmmo--;
+        _currentAmmo--;
+        UpdateAmmoUI();
 
-        GameObject projectile = Instantiate(flowerProjectilePrefab, firePoint.position, firePoint.rotation);
-
-        // color
-        SpriteRenderer sr = projectile.GetComponent<SpriteRenderer>();
-        if (sr != null) sr.color = flowerColor;
-
-        // movement
-        Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
-        if (rb == null) rb = projectile.AddComponent<Rigidbody2D>();
-        rb.gravityScale = 0;
-        rb.linearVelocity = firePoint.up * flowerSpeed;
-
-        // collision handler
-        FlowerCollision handler = projectile.AddComponent<FlowerCollision>();
-        handler.flowerPrefab = splatPrefab;
-        handler.flowerColor = flowerColor;
-        handler.damage = damage;
-
-        // tag as flower for cupid conversion
-        projectile.tag = "Flower";
-
-        // auto destroy
-        Destroy(projectile, 3f);
+        GameObject projGO = Instantiate(flowerProjectilePrefab, firePoint.position, firePoint.rotation);
+        FlowerCollision projectileLogic = projGO.AddComponent<FlowerCollision>();
+        projectileLogic.Setup(splatPrefab, teamColor, firePoint.up * flowerSpeed, maxRange);
     }
 
     IEnumerator Reload()
     {
-        isReloading = true;
+        _isReloading = true;
+        if (ammoBar != null) ammoBar.color = new Color(1, 1, 1, 0.5f);
         yield return new WaitForSeconds(reloadTime);
-        currentAmmo = maxAmmo;
-        isReloading = false;
+        _currentAmmo = maxAmmo;
+        _isReloading = false;
+        if (ammoBar != null) ammoBar.color = Color.white;
         UpdateAmmoUI();
     }
 
     void UpdateAmmoUI()
     {
-        if (ammoBar != null)
-        {
-            float fillAmount = (float)currentAmmo / maxAmmo;
-            ammoBar.fillAmount = fillAmount;
-        }
+        if (ammoBar != null) ammoBar.fillAmount = (float)_currentAmmo / maxAmmo;
     }
 }
 
+// --- PROJECTILE & INK LOGIC ---
 public class FlowerCollision : MonoBehaviour
 {
-    public GameObject flowerPrefab;
-    public Color flowerColor;
-    public int damage = 5;
+    private GameObject _splatPrefab;
+    private Color _paintColor;
+    private float _dropTimer;
+    private float _dropInterval = 0.05f;
+    private Vector2 _startPos;
+    private float _maxDistance;
+
+    public void Setup(GameObject splat, Color color, Vector2 velocity, float range)
+    {
+        _splatPrefab = splat;
+        _paintColor = color;
+        _maxDistance = range;
+        _startPos = transform.position;
+
+        if (TryGetComponent(out SpriteRenderer sr)) sr.color = color;
+
+        Rigidbody2D rb = GetComponent<Rigidbody2D>() ?? gameObject.AddComponent<Rigidbody2D>();
+        rb.gravityScale = 0;
+        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        rb.linearVelocity = velocity;
+
+        CircleCollider2D col = GetComponent<CircleCollider2D>() ?? gameObject.AddComponent<CircleCollider2D>();
+        col.isTrigger = true;
+
+        Destroy(gameObject, 5f);
+    }
+
+    void Update()
+    {
+        _dropTimer += Time.deltaTime;
+        if (_dropTimer >= _dropInterval) { SpawnPaint(0.45f); _dropTimer = 0; }
+
+        if (Vector2.Distance(_startPos, transform.position) >= _maxDistance) HandleImpact();
+    }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // hit enemy
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Ground")) HandleImpact();
+    }
+
+    void HandleImpact()
+    {
+        SpawnPaint(1.3f);
+        Destroy(gameObject);
+    }
+
+    void SpawnPaint(float scaleMult)
+    {
+        if (_splatPrefab == null) return;
+
+        GameObject splat = Instantiate(_splatPrefab, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
+
+        // --- REGISTRATION SETUP ---
+        // Give the splat a Tag so the player can find it
+        splat.tag = "Ink";
+
+        // Give it a trigger collider so the player can "step" into it
+        CircleCollider2D col = splat.GetComponent<CircleCollider2D>() ?? splat.AddComponent<CircleCollider2D>();
+        col.isTrigger = true;
+        col.radius = 0.5f;
+
+        if (splat.TryGetComponent(out SpriteRenderer sr))
         {
-            Damageable enemy = other.GetComponent<Damageable>();
-            if (enemy != null)
-            {
-                enemy.TakeDamage(damage);
-            }
-            Destroy(gameObject);
-            return;
+            sr.color = _paintColor;
+            sr.sortingOrder = -1;
         }
-
-        // hit wall
-        if (other.CompareTag("Wall") || other.CompareTag("Ground"))
-        {
-            // spawn splat
-            if (flowerPrefab != null)
-            {
-                GameObject splat = Instantiate(
-                    flowerPrefab,
-                    transform.position,
-                    Quaternion.Euler(0, 0, Random.Range(0, 360))
-                );
-
-                var sr = splat.GetComponent<SpriteRenderer>();
-                if (sr != null)
-                    sr.color = flowerColor;
-
-                splat.transform.localScale *= Random.Range(0.6f, 1.3f);
-            }
-            Destroy(gameObject);
-        }
+        splat.transform.localScale *= Random.Range(0.8f, 1.2f) * scaleMult;
     }
 }
