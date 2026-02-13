@@ -26,6 +26,7 @@ public class LilyShooter : MonoBehaviour
     private int _currentAmmo;
     private float _nextFireTime;
     private bool _isReloading;
+    private SwitchCharacters switchScript;
 
     void Start()
     {
@@ -78,6 +79,26 @@ public class LilyShooter : MonoBehaviour
     void UpdateAmmoUI()
     {
         if (ammoBar != null) ammoBar.fillAmount = (float)_currentAmmo / maxAmmo;
+    }
+
+    void RotateTowardsMouse()
+    {
+        if (cam == null) return;
+
+        // Get mouse position in world space
+        Vector3 mouseScreenPosition = Input.mousePosition;
+        mouseScreenPosition.z = -cam.transform.position.z;
+
+        Vector3 mouseWorldPosition = cam.ScreenToWorldPoint(mouseScreenPosition);
+
+        // Calculate direction to mouse
+        Vector3 lookDir = mouseWorldPosition - transform.position;
+
+        // Calculate angle
+        float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
+
+        // Apply rotation
+        transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
     }
 }
 

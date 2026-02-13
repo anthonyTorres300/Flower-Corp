@@ -218,6 +218,7 @@ public class CorruptedCupid : MonoBehaviour
         Destroy(gameObject);
     }
 
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("PlayerBullet"))
@@ -247,5 +248,44 @@ public class CorruptedCupid : MonoBehaviour
                 health.TakeDamage(5);
             }
         }
+    }
+
+    // Called when the enemy is eliminated (when health reaches 0)
+    public void OnEliminated()
+    {
+        Debug.Log("CorruptedCupid eliminated - spawning friendly Cupid");
+
+        // spawn friendly cupid when eliminated
+        if (friendlyCupidPrefab != null)
+        {
+            GameObject friendlyCupid = Instantiate(friendlyCupidPrefab, transform.position, Quaternion.identity);
+            Debug.Log("Friendly Cupid instantiated: " + friendlyCupid.name);
+
+            // add to cupid manager if it exists
+            CupidManager cupidManager = FindObjectOfType<CupidManager>();
+            if (cupidManager != null)
+            {
+                CupidData cupidData = friendlyCupid.GetComponent<CupidFollow>()?.cupidData;
+                if (cupidData != null)
+                {
+                    Debug.Log("Adding Cupid to manager: " + cupidData.cupidName);
+                    cupidManager.AddCupid(cupidData);
+                }
+                else
+                {
+                    Debug.LogWarning("Friendly Cupid prefab missing CupidFollow component or cupidData");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("CupidManager not found in scene");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("friendlyCupidPrefab is null");
+        }
+
+        Destroy(gameObject);
     }
 }

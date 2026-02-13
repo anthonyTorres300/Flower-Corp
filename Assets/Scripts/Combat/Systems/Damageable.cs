@@ -33,6 +33,15 @@ public class Damageable : MonoBehaviour
     void Die()
     {
         onDeath?.Invoke();
+
+        // Check if this is a CorruptedCupid and call OnEliminated if it exists
+        CorruptedCupid corruptedCupid = GetComponent<CorruptedCupid>();
+        if (corruptedCupid != null)
+        {
+            corruptedCupid.OnEliminated();
+            return; // Don't destroy the game object here, let OnEliminated handle it
+        }
+
         Destroy(gameObject);
     }
 

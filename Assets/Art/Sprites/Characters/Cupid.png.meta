@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 71fc46a39c22339eb86b1da3ed7b5310
+guid: 3bf4b76595d44498caf7f50c1427a085
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4640752467008884968
-    second: CorruptedCupid_0
+      213: 4149271677417525947
+    second: Cupid_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -72,7 +72,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 32
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CorruptedCupid_0
+      name: Cupid_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8e0159ee7c3476040800000000000000
-      internalID: 4640752467008884968
+      spriteID: bb29f095b9c259930800000000000000
+      internalID: 4149271677417525947
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      CorruptedCupid_0: 4640752467008884968
+      Cupid_0: 4149271677417525947
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

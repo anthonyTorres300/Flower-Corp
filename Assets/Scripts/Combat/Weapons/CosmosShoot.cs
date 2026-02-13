@@ -2,6 +2,15 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
+public enum WeaponType
+{
+    Pistol,
+    MachineGun,
+    Shotgun,
+    Sniper,
+    BurstRifle
+}
+
 public class CosmosShoot : MonoBehaviour
 {
     [Header("Setup")]
@@ -28,6 +37,11 @@ public class CosmosShoot : MonoBehaviour
     [Header("Ammo")]
     public int maxAmmo = 10;
     public float reloadTime = 1.5f;
+
+    [Header("Spread Settings")]
+    public int projectileCount = 1;
+    public float spread = 5f;
+    public float spreadAngle = 10f;
 
     private int currentAmmo;
     private bool isReloading = false;
@@ -138,7 +152,7 @@ public class CosmosShoot : MonoBehaviour
         }
     }
 
-    void FireBullet()
+    void FireSpread(int count, float spreadAngle)
     {
         float angleStep = count > 1 ? spreadAngle / (count - 1) : 0;
         float centeringOffset = count > 1 ? spreadAngle / 2 : 0;
@@ -188,6 +202,7 @@ public class CosmosShoot : MonoBehaviour
         Bulletdamage dmg = bullet.GetComponent<Bulletdamage>();
         if (dmg == null) dmg = bullet.AddComponent<Bulletdamage>();
         dmg.damage = damage;
+    }
 
     public void EquipWeapon(WeaponType type)
     {

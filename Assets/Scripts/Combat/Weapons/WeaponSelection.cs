@@ -5,7 +5,7 @@ using TMPro;          // Required for TextMeshPro
 public class WeaponSelection : MonoBehaviour
 {
     [Header("References")]
-    public CosmosWeapon cosmosWeaponScript; // Drag your Player object here
+    public CosmosShoot cosmosWeaponScript; // Drag your Player object here
     public GameObject selectionPanel;       // Drag the Panel containing the buttons here
 
     [Header("UI Components")]
@@ -35,7 +35,7 @@ public class WeaponSelection : MonoBehaviour
     void GenerateChoices()
     {
         // Get all possible weapon types from the Enum
-        var values = System.Enum.GetValues(typeof(CosmosWeapon.WeaponType));
+        var values = System.Enum.GetValues(typeof(WeaponType));
         int count = values.Length;
 
         // Pick two random DIFFERENT indexes
@@ -48,8 +48,8 @@ public class WeaponSelection : MonoBehaviour
         }
 
         // Convert indexes back to WeaponType
-        CosmosWeapon.WeaponType weapon1 = (CosmosWeapon.WeaponType)values.GetValue(index1);
-        CosmosWeapon.WeaponType weapon2 = (CosmosWeapon.WeaponType)values.GetValue(index2);
+        WeaponType weapon1 = (WeaponType)values.GetValue(index1);
+        WeaponType weapon2 = (WeaponType)values.GetValue(index2);
 
         // Update Button Text
         textLeft.text = weapon1.ToString();
@@ -64,7 +64,7 @@ public class WeaponSelection : MonoBehaviour
         buttonRight.onClick.AddListener(() => SelectWeapon(weapon2));
     }
 
-    void SelectWeapon(CosmosWeapon.WeaponType selectedType)
+    void SelectWeapon(WeaponType selectedType)
     {
         Debug.Log("Selected: " + selectedType);
 

@@ -2,34 +2,59 @@ using UnityEngine;
 
 public class CosmosBullets : MonoBehaviour
 {
-    [Header("Settings")]
-    public string targetTag = "AmmoCrate"; // The tag of the object to shoot
-    public int ammoToGive = 5;             // How much ammo to restore
+    [Header("Bullet Settings")]
+    public float bulletSpeed = 20f;
+    public int damage = 20;
+    public float lifetime = 3f;
 
-    void OnTriggerEnter2D(Collider2D hitInfo)
+    private Rigidbody2D rb;
+    private CosmosShoot weaponScript;
+
+    void Start()
     {
-        // 1. Check if we hit the specific "AmmoCrate" object
-        if (hitInfo.CompareTag(targetTag))
+        rb = GetComponent<Rigidbody2D>();
+
+        // find the weapon that fired this
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject player in players)
         {
-            // Find the player weapon script to give ammo
-            // (We use FindObjectOfType because there is usually only one player)
-            CosmosWeapon playerWeapon = FindObjectOfType<CosmosWeapon>();
-
-            if (playerWeapon != null)
+            CosmosShoot weapon = player.GetComponent<CosmosShoot>();
+            if (weapon != null)
             {
-                playerWeapon.AddAmmo(ammoToGive);
+                weaponScript = weapon;
+                damage = weapon.damage;
+                bulletSpeed = weapon.bulletSpeed;
+                break;
             }
-
-            // Destroy the crate
-            Destroy(hitInfo.gameObject);
-
-            // Destroy the bullet (so it doesn't go through)
-            Destroy(gameObject);
         }
 
-        // 2. Destroy bullet on hitting walls or other obstacles
-        // (Make sure the Player is not tagged "Untagged" or it might hit the player!)
-        else if (!hitInfo.CompareTag("Player") && !hitInfo.CompareTag("Bullet"))
+        // move forward
+        if (rb != null)
+        {
+            rb.gravityScale = 0;
+            rb.linearVelocity = transform.up * bulletSpeed;
+        }
+
+        // auto destroy
+        Destroy(gameObject, lifetime);
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        // hit enemy
+        if (other.CompareTag("Enemy"))
+        {
+            Damageable enemy = other.GetComponent<Damageable>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damage);
+            }
+            Destroy(gameObject);
+            return;
+        }
+
+        // hit wall
+        if (other.CompareTag("Wall"))
         {
             Destroy(gameObject);
         }

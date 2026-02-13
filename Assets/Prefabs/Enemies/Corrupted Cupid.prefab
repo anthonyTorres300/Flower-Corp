@@ -577,7 +577,7 @@ MonoBehaviour:
   arrowPrefab: {fileID: 629976964034122097, guid: 0de1aec0ee4de4681ae5d6294423df1f, type: 3}
   firePoint: {fileID: 5371208850915689777}
   debuffType: 0
-  friendlyCupidPrefab: {fileID: 0}
+  friendlyCupidPrefab: {fileID: 870558736175571779, guid: efc1c1e0dea004aa7abfecbb839587b9, type: 3}
   flowersNeededToConvert: 3
   spriteRenderer: {fileID: 0}
   normalColor: {r: 1, g: 0, b: 0, a: 1}
@@ -620,7 +620,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.2, y: 3.2}
+    oldSize: {x: 10.666667, y: 10.666667}
     newSize: {x: 4.62, y: 4.6}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -669,9 +669,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Damageable
   maxHealth: 5
   currentHealth: 0
-  spriteRenderer: {fileID: 0}
-  flashOnHit: 1
-  hitColor: {r: 1, g: 0, b: 0, a: 1}
-  flashDuration: 0.1
-  dropItems: []
-  dropChance: 0.3
+  onDeath:
+    m_PersistentCalls:
+      m_Calls: []
