@@ -1,19 +1,26 @@
 using UnityEngine;
 
-public class BulletDamage : MonoBehaviour
+public class Bulletdamage : MonoBehaviour
 {
-    public int damage = 1;
+    public int damage = 20;
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        // hit an enemy
         if (other.CompareTag("Enemy"))
         {
-            Damageable damageable = other.GetComponent<Damageable>();
-            if (damageable != null)
+            Damageable enemy = other.GetComponent<Damageable>();
+            if (enemy != null)
             {
-                damageable.TakeDamage(damage);
+                enemy.TakeDamage(damage);
             }
-            // Bullet destroys itself on hit
+            Destroy(gameObject);
+            return;
+        }
+
+        // hit a wall
+        if (other.CompareTag("Wall"))
+        {
             Destroy(gameObject);
         }
     }

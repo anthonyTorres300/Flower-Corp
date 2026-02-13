@@ -9,15 +9,15 @@ public class StoneChocolate : MonoBehaviour
 
     [Header("Split Attack")]
     public float splitRange = 3f;
-    public float splitDistance = 2f; // How far the halves separate
-    public float splitDuration = 1.2f; // Total time for split + merge
+    public float splitDistance = 2f;
+    public float splitDuration = 1.2f;
     public float splitCooldown = 3f;
     public int splitDamage = 10;
 
-    [Header("Visual")]
+    [Header("Visual - YOU ONLY HAVE TOP AND BOTTOM")]
     public SpriteRenderer spriteRenderer;
-    public Sprite topHalfSprite; // Assign top half of chocolate sprite
-    public Sprite bottomHalfSprite; // Assign bottom half of chocolate sprite
+    public Sprite topHalfSprite;
+    public Sprite bottomHalfSprite;
 
     private Transform target;
     private Rigidbody2D rb;
@@ -25,7 +25,6 @@ public class StoneChocolate : MonoBehaviour
     private float splitCooldownTimer = 0f;
     private GameObject topHalf;
     private GameObject bottomHalf;
-    private Sprite originalSprite;
 
     void Start()
     {
@@ -34,15 +33,15 @@ public class StoneChocolate : MonoBehaviour
         if (rb != null)
         {
             rb.gravityScale = 0;
-            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+            rb.freezeRotation = true;
+            // enemies dont push players
+            rb.mass = 0.1f;
         }
 
         if (spriteRenderer == null)
             spriteRenderer = GetComponent<SpriteRenderer>();
 
-        if (spriteRenderer != null)
-            originalSprite = spriteRenderer.sprite;
-
+        // find active player
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         if (players.Length > 0)
         {
@@ -103,22 +102,19 @@ public class StoneChocolate : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
         }
 
-        Debug.Log($"[ATTACK] {gameObject.name} splitting into halves!");
-
-        // Hide main sprite
+        // hide the main chocolate (which should show BOTH halves stacked)
         if (spriteRenderer != null)
         {
             spriteRenderer.enabled = false;
         }
 
-        // Create top and bottom halves
+        // create separate top and bottom halves
         topHalf = CreateHalf(true);
         bottomHalf = CreateHalf(false);
 
-        // Split apart - move in opposite directions
+        // split apart
         float elapsed = 0f;
         float splitTime = splitDuration * 0.4f;
-
         Vector3 startPos = transform.position;
 
         while (elapsed < splitTime)
@@ -134,10 +130,10 @@ public class StoneChocolate : MonoBehaviour
             yield return null;
         }
 
-        // Hold position
+        // stay split for a moment
         yield return new WaitForSeconds(splitDuration * 0.2f);
 
-        // Merge back
+        // merge back together
         elapsed = 0f;
         Vector3 topPos = topHalf != null ? topHalf.transform.position : startPos;
         Vector3 bottomPos = bottomHalf != null ? bottomHalf.transform.position : startPos;
@@ -155,19 +151,17 @@ public class StoneChocolate : MonoBehaviour
             yield return null;
         }
 
-        // Destroy halves
+        // destroy the halves
         if (topHalf != null) Destroy(topHalf);
         if (bottomHalf != null) Destroy(bottomHalf);
 
-        // Show main sprite
+        // show the main sprite again
         if (spriteRenderer != null)
         {
             spriteRenderer.enabled = true;
         }
 
         isSplitting = false;
-
-        Debug.Log($"[ATTACK] {gameObject.name} merged back together!");
     }
 
     GameObject CreateHalf(bool isTop)
@@ -176,38 +170,21 @@ public class StoneChocolate : MonoBehaviour
         half.transform.position = transform.position;
         half.transform.localScale = transform.localScale;
 
-        // Add sprite renderer
         SpriteRenderer sr = half.AddComponent<SpriteRenderer>();
 
-        // Use specific half sprites if assigned, otherwise use full sprite
-        if (isTop && topHalfSprite != null)
-        {
-            sr.sprite = topHalfSprite;
-        }
-        else if (!isTop && bottomHalfSprite != null)
-        {
-            sr.sprite = bottomHalfSprite;
-        }
-        else if (spriteRenderer != null)
-        {
-            // Fallback to full sprite with color tint
-            sr.sprite = spriteRenderer.sprite;
-            sr.color = Color.red;
-        }
-
+        // use your top/bottom sprites
+        sr.sprite = isTop ? topHalfSprite : bottomHalfSprite;
         sr.sortingLayerName = spriteRenderer != null ? spriteRenderer.sortingLayerName : "Default";
         sr.sortingOrder = spriteRenderer != null ? spriteRenderer.sortingOrder + 1 : 1;
 
-        // Match flip
         if (spriteRenderer != null)
             sr.flipX = spriteRenderer.flipX;
 
-        // Add collider for damage detection
+        // add trigger collider for damage
         CircleCollider2D col = half.AddComponent<CircleCollider2D>();
         col.isTrigger = true;
         col.radius = 0.5f;
 
-        // Add damage component
         ChocolateHalfDamage damageScript = half.AddComponent<ChocolateHalfDamage>();
         damageScript.damage = splitDamage;
 
@@ -240,7 +217,6 @@ public class StoneChocolate : MonoBehaviour
     }
 }
 
-// Helper component for chocolate halves
 public class ChocolateHalfDamage : MonoBehaviour
 {
     public int damage = 10;
@@ -257,7 +233,6 @@ public class ChocolateHalfDamage : MonoBehaviour
             {
                 health.TakeDamage(damage);
                 hasHit = true;
-                Debug.Log($"[DAMAGE] Chocolate half hit player!");
             }
         }
     }

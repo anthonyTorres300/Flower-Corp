@@ -5,7 +5,8 @@ public class SwitchCharacters : MonoBehaviour
 {
     [Header("Settings")]
     public float moveSpeed = 5f;
-    public float followDistance = 2f;
+    public float followDistance = 1.5f; // distance to maintain behind leader
+    public float followSmoothTime = 0.15f; // how smoothly follower catches up
     public bool isActive = false;
 
     [Header("References")]
@@ -16,23 +17,19 @@ public class SwitchCharacters : MonoBehaviour
     public Slider healthSlider;
 
     [Header("Player Icon UI")]
-    public Image playerIcon;     
-    public Sprite myIcon;        
+    public Image playerIcon;
+    public Sprite myIcon;
 
     private Rigidbody2D rb;
     private Camera cam;
     private PlayerHealth health;
-
     private static float lastSwitchTime;
-    private Transform camTransform;
-    public Vector3 cameraOffset = new Vector3(0, 0, -10);
-
+    private Vector2 followVelocity = Vector2.zero;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         cam = Camera.main;
-        camTransform = Camera.main.transform;
         health = GetComponent<PlayerHealth>();
 
         UpdateShootingState();
@@ -41,12 +38,12 @@ public class SwitchCharacters : MonoBehaviour
         {
             UpdateHealthUI();
             UpdatePlayerIcon();
-            MoveCameraToMe(); 
         }
     }
 
     void Update()
     {
+        // switch with tab
         if (isActive && Input.GetKeyDown(KeyCode.Tab) && Time.time > lastSwitchTime + 0.2f)
         {
             PerformSwitch();
@@ -59,14 +56,13 @@ public class SwitchCharacters : MonoBehaviour
         }
         else
         {
-            HandleFollowAI();
+            FollowOtherPlayer();
         }
     }
 
     void PerformSwitch()
     {
         lastSwitchTime = Time.time;
-
         isActive = false;
         UpdateShootingState();
 
@@ -74,16 +70,11 @@ public class SwitchCharacters : MonoBehaviour
         {
             otherCharacter.isActive = true;
             otherCharacter.UpdateShootingState();
-
             otherCharacter.healthSlider = healthSlider;
             otherCharacter.playerIcon = playerIcon;
-
             otherCharacter.UpdatePlayerIcon();
-
-            otherCharacter.MoveCameraToMe();
         }
     }
-
 
     void UpdatePlayerIcon()
     {
@@ -96,7 +87,6 @@ public class SwitchCharacters : MonoBehaviour
     void UpdateHealthUI()
     {
         if (healthSlider == null || health == null) return;
-
         healthSlider.maxValue = health.maxHealth;
         healthSlider.value = health.currentHealth;
     }
@@ -117,54 +107,31 @@ public class SwitchCharacters : MonoBehaviour
 
         rb.linearVelocity = moveDir * moveSpeed;
 
+        // aim towards mouse
         Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
         Vector2 lookDir = (Vector2)mousePos - rb.position;
         rb.rotation = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
     }
 
-    void HandleFollowAI()
+    void FollowOtherPlayer()
     {
         if (otherCharacter == null) return;
 
+        // target position is behind the active player based on their facing direction
         Vector3 targetPos = otherCharacter.transform.position - (otherCharacter.transform.up * followDistance);
-        float distanceToTarget = Vector2.Distance(transform.position, targetPos);
 
-        if (distanceToTarget > 0.1f)
-        {
-            Vector2 direction = (targetPos - transform.position).normalized;
-            rb.linearVelocity = direction * moveSpeed;
+        // smooth follow using SmoothDamp for natural catch-up behavior
+        Vector2 currentPos = rb.position;
+        Vector2 smoothTarget = Vector2.SmoothDamp(currentPos, targetPos, ref followVelocity, followSmoothTime);
 
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
-            rb.rotation = Mathf.LerpAngle(rb.rotation, angle, Time.deltaTime * 10f);
-        }
-        else
-        {
-            rb.linearVelocity = Vector2.zero;
-        }
-    }
+        rb.linearVelocity = (smoothTarget - currentPos) / Time.fixedDeltaTime;
 
-    void MoveCameraToMe()
-    {
-        if (camTransform != null)
+        // face movement direction smoothly
+        Vector2 moveDirection = smoothTarget - currentPos;
+        if (moveDirection.magnitude > 0.1f)
         {
-            StopAllCoroutines();
-            StartCoroutine(SmoothCameraMove());
+            float targetAngle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg - 90f;
+            rb.rotation = Mathf.LerpAngle(rb.rotation, targetAngle, Time.deltaTime * 10f);
         }
     }
-
-    System.Collections.IEnumerator SmoothCameraMove()
-    {
-        Vector3 start = camTransform.position;
-        Vector3 target = transform.position + cameraOffset;
-        float t = 0;
-
-        while (t < 1)
-        {
-            t += Time.deltaTime * 6f;
-            camTransform.position = Vector3.Lerp(start, target, t);
-            yield return null;
-        }
-    }
-
-
 }

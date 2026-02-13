@@ -4,47 +4,59 @@ using System.Collections.Generic;
 public class CupidManager : MonoBehaviour
 {
     [Header("Active Cupids")]
-    public List<CupidData> currentCupids = new List<CupidData>(); // The list of cupids following you
-    public Transform cupidSpawnPoint; // Where they appear (usually behind player)
+    public List<CupidData> currentCupids = new List<CupidData>();
+    public Transform cupidSpawnPoint;
 
     [Header("Player Components")]
-    public CosmosWeapon weaponScript;   // Drag your weapon script here
-    // public PlayerMovement movementScript; // Drag movement script here if you have one
+    public CosmosShoot cosmosWeapon;
+    public LilyShooter lilyWeapon;
 
-    // Base stats to remember what we started with
-    private float baseFireRate;
-    private float baseDamage = 1.0f; // Default multiplier
+    // base stats
+    private float cosmosBaseFireRate;
+    private int cosmosBaseDamage;
+    private int cosmosBaseAmmo;
+    private float lilyBaseFireRate;
+    private int lilyBaseDamage;
+    private int lilyBaseAmmo;
 
     void Start()
     {
-        if (weaponScript != null)
+        if (cosmosWeapon != null)
         {
-            baseFireRate = weaponScript.fireRate;
-            // baseDamage = weaponScript.damage; (If you added damage to CosmosWeapon)
+            cosmosBaseFireRate = cosmosWeapon.fireRate;
+            cosmosBaseDamage = cosmosWeapon.damage;
+            cosmosBaseAmmo = cosmosWeapon.maxAmmo;
+        }
+
+        if (lilyWeapon != null)
+        {
+            lilyBaseFireRate = lilyWeapon.fireRate;
+            lilyBaseDamage = 5; // lily doesn't have public damage, default to 5
+            lilyBaseAmmo = lilyWeapon.maxAmmo;
         }
     }
 
-    // Call this to add a new Cupid!
     public void AddCupid(CupidData newCupid)
     {
-        // 1. Add to list
         currentCupids.Add(newCupid);
 
-        // 2. Spawn the visual object
-        if (newCupid.cupidPrefab != null)
+        // spawn cupid companion
+        if (newCupid.cupidPrefab != null && cupidSpawnPoint != null)
         {
             GameObject cupidObj = Instantiate(newCupid.cupidPrefab, cupidSpawnPoint.position, Quaternion.identity);
 
-            // Setup the follow script automatically
             CupidFollow followScript = cupidObj.GetComponent<CupidFollow>();
             if (followScript == null) followScript = cupidObj.AddComponent<CupidFollow>();
 
-            followScript.player = this.transform; // Tell cupid to follow ME
-            followScript.fenceRadius = Random.Range(2f, 4f); // Randomize leash so they don't stack
-            followScript.wanderRadius = 1.5f;
+            followScript.followDistance = Random.Range(2f, 4f);
         }
 
-        // 3. Recalculate all stats
+        UpdatePlayerStats();
+    }
+
+    public void RemoveCupid(CupidData cupidToRemove)
+    {
+        currentCupids.Remove(cupidToRemove);
         UpdatePlayerStats();
     }
 
@@ -54,34 +66,37 @@ public class CupidManager : MonoBehaviour
         float totalDamageBonus = 0f;
         int totalAmmoBonus = 0;
 
-        // Loop through every cupid we have and add up the numbers
+        // sum up all bonuses
         foreach (CupidData cupid in currentCupids)
         {
             switch (cupid.perkType)
             {
-                case cupidPerk.FireRateBoost:
+                case CupidPerk.FireRateBoost:
                     totalFireRateBonus += cupid.perkValue;
                     break;
-                case cupidPerk.DamageBoost:
+                case CupidPerk.DamageBoost:
                     totalDamageBonus += cupid.perkValue;
                     break;
-                case cupidPerk.MaxAmmo:
+                case CupidPerk.MaxAmmo:
                     totalAmmoBonus += (int)cupid.perkValue;
                     break;
             }
         }
 
-        // Apply to Weapon Script
-        if (weaponScript != null)
+        // apply to cosmos
+        if (cosmosWeapon != null)
         {
-            // Example: Lower fire rate is faster. 
-            // If base is 0.5s and we have 20% bonus, we reduce delay by 20%
-            weaponScript.fireRate = baseFireRate * (1.0f - totalFireRateBonus);
+            cosmosWeapon.fireRate = cosmosBaseFireRate * (1.0f - totalFireRateBonus);
+            cosmosWeapon.damage = cosmosBaseDamage + (int)totalDamageBonus;
+            cosmosWeapon.maxAmmo = cosmosBaseAmmo + totalAmmoBonus;
+        }
 
-            // Add max ammo (Be careful not to reset current ammo improperly)
-            weaponScript.maxAmmo += totalAmmoBonus;
-
-            Debug.Log($"Stats Updated! Cupids: {currentCupids.Count} | FireRate Bonus: {totalFireRateBonus * 100}%");
+        // apply to lily
+        if (lilyWeapon != null)
+        {
+            lilyWeapon.fireRate = lilyBaseFireRate * (1.0f - totalFireRateBonus);
+            // lily doesn't have public damage field, would need to add it
+            lilyWeapon.maxAmmo = lilyBaseAmmo + totalAmmoBonus;
         }
     }
 }

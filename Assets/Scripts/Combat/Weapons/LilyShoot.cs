@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI; // Required for UI
+using UnityEngine.UI;
 using System.Collections;
 
 public class LilyShooter : MonoBehaviour
@@ -10,43 +10,49 @@ public class LilyShooter : MonoBehaviour
     public Transform firePoint;
     public Camera cam;
 
-    [Header("UI Setup")]
-    public Image ammoBar; // Drag your Filled Image here
+    [Header("UI")]
+    public Image ammoBar;
 
     [Header("Settings")]
     public float flowerSpeed = 15f;
     public Color flowerColor = Color.cyan;
     public float fireRate = 0.15f;
-    private float nextFireTime;
+    public int damage = 5; // added damage field for cupid bonuses
 
-    [Header("Ammo Stats")]
+    [Header("Ammo")]
     public int maxAmmo = 20;
     public float reloadTime = 1.5f;
+
     private int currentAmmo;
     private bool isReloading = false;
+    private float nextFireTime;
+    private SwitchCharacters switchScript;
 
     void Start()
     {
         currentAmmo = maxAmmo;
         if (cam == null) cam = Camera.main;
+        switchScript = GetComponent<SwitchCharacters>();
         UpdateAmmoUI();
     }
 
     void Update()
     {
-        RotateTowardsMouse();
+        // check if active
+        if (switchScript != null && !switchScript.isActive) return;
+
         UpdateAmmoUI();
 
         if (isReloading) return;
 
-        // Auto-reload if empty
+        // auto reload
         if (currentAmmo <= 0)
         {
             StartCoroutine(Reload());
             return;
         }
 
-        // Shoot input
+        // hold to shoot
         if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
         {
             Shoot();
@@ -54,44 +60,39 @@ public class LilyShooter : MonoBehaviour
         }
     }
 
-    void RotateTowardsMouse()
-    {
-        Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 lookDir = (Vector2)mousePos - (Vector2)transform.position;
-        float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
-        transform.rotation = Quaternion.Euler(0, 0, angle);
-    }
-
     void Shoot()
     {
-        currentAmmo--; // Reduce Ammo
+        currentAmmo--;
 
         GameObject projectile = Instantiate(flowerProjectilePrefab, firePoint.position, firePoint.rotation);
 
+        // color
         SpriteRenderer sr = projectile.GetComponent<SpriteRenderer>();
         if (sr != null) sr.color = flowerColor;
 
+        // movement
         Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
         if (rb == null) rb = projectile.AddComponent<Rigidbody2D>();
-
         rb.gravityScale = 0;
-
-        // Note: linearVelocity is for Unity 6+. Use rb.velocity for older versions.
         rb.linearVelocity = firePoint.up * flowerSpeed;
 
-        // This is the part that needs the class below!
+        // collision handler
         FlowerCollision handler = projectile.AddComponent<FlowerCollision>();
         handler.flowerPrefab = splatPrefab;
         handler.flowerColor = flowerColor;
+        handler.damage = damage;
+
+        // tag as flower for cupid conversion
+        projectile.tag = "Flower";
+
+        // auto destroy
+        Destroy(projectile, 3f);
     }
 
     IEnumerator Reload()
     {
         isReloading = true;
-        // Optional: Debug.Log("Reloading...");
-
         yield return new WaitForSeconds(reloadTime);
-
         currentAmmo = maxAmmo;
         isReloading = false;
         UpdateAmmoUI();
@@ -107,30 +108,44 @@ public class LilyShooter : MonoBehaviour
     }
 }
 
-// ---------------------------------------------------------
-// THIS CLASS WAS MISSING BEFORE - IT MUST BE IN THE FILE
-// ---------------------------------------------------------
 public class FlowerCollision : MonoBehaviour
 {
     public GameObject flowerPrefab;
     public Color flowerColor;
+    public int damage = 5;
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Ground"))
+        // hit enemy
+        if (other.CompareTag("Enemy"))
         {
-            GameObject splat = Instantiate(
-                flowerPrefab,
-                transform.position,
-                Quaternion.Euler(0, 0, Random.Range(0, 360))
-            );
+            Damageable enemy = other.GetComponent<Damageable>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damage);
+            }
+            Destroy(gameObject);
+            return;
+        }
 
-            var sr = splat.GetComponent<SpriteRenderer>();
-            if (sr != null)
-                sr.color = flowerColor;
+        // hit wall
+        if (other.CompareTag("Wall") || other.CompareTag("Ground"))
+        {
+            // spawn splat
+            if (flowerPrefab != null)
+            {
+                GameObject splat = Instantiate(
+                    flowerPrefab,
+                    transform.position,
+                    Quaternion.Euler(0, 0, Random.Range(0, 360))
+                );
 
-            splat.transform.localScale *= Random.Range(0.6f, 1.3f);
+                var sr = splat.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                    sr.color = flowerColor;
 
+                splat.transform.localScale *= Random.Range(0.6f, 1.3f);
+            }
             Destroy(gameObject);
         }
     }

@@ -85,8 +85,8 @@ MonoBehaviour:
   splitCooldown: 3
   splitDamage: 10
   spriteRenderer: {fileID: 1382571831355608139}
-  topHalfSprite: {fileID: 1443224660685670620, guid: 997b23c23975543c996e4f09de985431, type: 3}
-  bottomHalfSprite: {fileID: -2253730981235513240, guid: f136c89933c9e4aafa73a8c6ca6c6497, type: 3}
+  topHalfSprite: {fileID: 21300000, guid: 997b23c23975543c996e4f09de985431, type: 3}
+  bottomHalfSprite: {fileID: 21300000, guid: f136c89933c9e4aafa73a8c6ca6c6497, type: 3}
 --- !u!114 &8152370059759900337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,8 +145,8 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.76, y: 5.28}
-    newSize: {x: 3.76, y: 5.28}
+    oldSize: {x: 0.32, y: 0.32}
+    newSize: {x: 0.32, y: 0.32}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -202,15 +202,15 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -6840296974913271692, guid: 2f5cf6750e42f485f90f7b0a74fd671e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f136c89933c9e4aafa73a8c6ca6c6497, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 3.76, y: 5.28}
+  m_Size: {x: 0.32, y: 0.32}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
 --- !u!1 &1460261347761303685
 GameObject:

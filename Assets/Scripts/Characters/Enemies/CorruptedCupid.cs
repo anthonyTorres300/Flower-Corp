@@ -3,20 +3,20 @@ using UnityEngine;
 public class CorruptedCupid : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed = 4.5f; // Increased from 2.5
-    public float chaseRange = 20f; // Increased from 12
+    public float moveSpeed = 4.5f;
+    public float chaseRange = 20f;
     public float orbitDistance = 5f;
-    public float orbitSpeed = 3f; // Increased from 2
+    public float orbitSpeed = 3f;
     public float randomMoveInterval = 1.5f;
 
     [Header("Combat")]
-    public float attackRange = 10f; // Increased from 8
+    public float attackRange = 10f;
     public float attackCooldown = 2.5f;
     public GameObject arrowPrefab;
     public Transform firePoint;
 
     [Header("Debuff Type")]
-    public DebuffType debuffType = DebuffType.None; // Set at spawn - None means normal arrows
+    public DebuffType debuffType = DebuffType.None;
 
     [Header("Conversion")]
     public GameObject friendlyCupidPrefab;
@@ -44,6 +44,9 @@ public class CorruptedCupid : MonoBehaviour
         if (rb != null)
         {
             rb.gravityScale = 0;
+            rb.freezeRotation = true;
+            // enemies dont push players around
+            rb.mass = 0.1f;
         }
 
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
@@ -81,7 +84,6 @@ public class CorruptedCupid : MonoBehaviour
 
         float distanceToPlayer = Vector2.Distance(transform.position, target.position);
 
-        // Always chase if far, orbit if close
         if (distanceToPlayer <= orbitDistance * 1.2f)
         {
             currentState = State.Orbit;
@@ -91,7 +93,6 @@ public class CorruptedCupid : MonoBehaviour
             currentState = State.Chase;
         }
 
-        // Execute state behavior
         switch (currentState)
         {
             case State.Chase:
@@ -102,7 +103,6 @@ public class CorruptedCupid : MonoBehaviour
                 break;
         }
 
-        // Shoot if in range
         if (distanceToPlayer <= attackRange && cooldown <= 0f)
         {
             Shoot();
@@ -167,7 +167,7 @@ public class CorruptedCupid : MonoBehaviour
         if (arrowScript != null)
         {
             arrowScript.Initialize(dir);
-            arrowScript.SetDebuff(debuffType); // Use assigned debuff type
+            arrowScript.SetDebuff(debuffType);
         }
     }
 
@@ -183,7 +183,6 @@ public class CorruptedCupid : MonoBehaviour
     public void ReceiveFlower()
     {
         flowersReceived++;
-        Debug.Log($"[CONVERSION] {gameObject.name} received flower ({flowersReceived}/{flowersNeededToConvert})");
 
         if (spriteRenderer != null)
         {
@@ -199,11 +198,21 @@ public class CorruptedCupid : MonoBehaviour
 
     void ConvertToFriendly()
     {
-        Debug.Log($"[CONVERSION] {gameObject.name} converted to friendly!");
-
+        // spawn friendly cupid companion
         if (friendlyCupidPrefab != null)
         {
-            Instantiate(friendlyCupidPrefab, transform.position, Quaternion.identity);
+            GameObject friendlyCupid = Instantiate(friendlyCupidPrefab, transform.position, Quaternion.identity);
+
+            // add to cupid manager if it exists
+            CupidManager cupidManager = FindObjectOfType<CupidManager>();
+            if (cupidManager != null)
+            {
+                CupidData cupidData = friendlyCupid.GetComponent<CupidFollow>()?.cupidData;
+                if (cupidData != null)
+                {
+                    cupidManager.AddCupid(cupidData);
+                }
+            }
         }
 
         Destroy(gameObject);

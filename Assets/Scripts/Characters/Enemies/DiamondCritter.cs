@@ -5,7 +5,7 @@ public class DiamondCritter : MonoBehaviour
     [Header("Movement")]
     public float detectionRange = 8f;
     public float dashSpeed = 12f;
-    public float chargeUpTime = 0.8f; // Time before dashing
+    public float chargeUpTime = 0.8f;
 
     [Header("Combat")]
     public int dashDamage = 15;
@@ -27,7 +27,9 @@ public class DiamondCritter : MonoBehaviour
         if (rb != null)
         {
             rb.gravityScale = 0;
-            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+            rb.freezeRotation = true;
+            // enemies dont push players
+            rb.mass = 0.1f;
         }
 
         if (spriteRenderer == null)
@@ -56,12 +58,9 @@ public class DiamondCritter : MonoBehaviour
 
         if (isDashing)
         {
-            // Continue dashing until reaching target or hitting something
             Vector2 currentPos = transform.position;
             if (Vector2.Distance(currentPos, dashTargetPosition) < 0.5f)
             {
-                // Reached target position without hitting player
-                Debug.Log($"[ATTACK] {gameObject.name} missed - despawning");
                 Destroy(gameObject);
             }
             return;
@@ -71,14 +70,12 @@ public class DiamondCritter : MonoBehaviour
         {
             chargeTimer -= Time.deltaTime;
 
-            // Visual pulse while charging
             if (spriteRenderer != null)
             {
                 float pulse = Mathf.PingPong(Time.time * 10f, 0.5f);
                 spriteRenderer.color = Color.Lerp(Color.white, Color.red, pulse);
             }
 
-            // Dash when charge complete
             if (chargeTimer <= 0f)
             {
                 Dash();
@@ -86,7 +83,6 @@ public class DiamondCritter : MonoBehaviour
         }
         else
         {
-            // Check if player in range
             float distanceToPlayer = Vector2.Distance(transform.position, target.position);
 
             if (distanceToPlayer <= detectionRange)
@@ -101,13 +97,10 @@ public class DiamondCritter : MonoBehaviour
         isCharging = true;
         chargeTimer = chargeUpTime;
 
-        // Stop any movement
         if (rb != null)
         {
             rb.linearVelocity = Vector2.zero;
         }
-
-        Debug.Log($"[ATTACK] {gameObject.name} detected player - charging dash!");
     }
 
     void Dash()
@@ -115,10 +108,8 @@ public class DiamondCritter : MonoBehaviour
         isDashing = true;
         isCharging = false;
 
-        // Lock target position (where player is NOW)
         dashTargetPosition = target.position;
 
-        // Calculate direction and dash
         Vector2 direction = (dashTargetPosition - (Vector2)transform.position).normalized;
 
         if (rb != null)
@@ -126,15 +117,11 @@ public class DiamondCritter : MonoBehaviour
             rb.linearVelocity = direction * dashSpeed;
         }
 
-        // Restore color
         if (spriteRenderer != null)
         {
             spriteRenderer.color = Color.white;
         }
 
-        Debug.Log($"[ATTACK] {gameObject.name} dashing to {dashTargetPosition}!");
-
-        // Auto-destroy after dash duration (safety)
         Destroy(gameObject, 3f);
     }
 
@@ -148,7 +135,6 @@ public class DiamondCritter : MonoBehaviour
                 health.TakeDamage(dashDamage);
             }
 
-            Debug.Log($"[ATTACK] {gameObject.name} hit player - despawning");
             Destroy(gameObject);
         }
     }

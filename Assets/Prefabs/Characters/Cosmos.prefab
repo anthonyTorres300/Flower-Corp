@@ -285,7 +285,6 @@ MonoBehaviour:
   healthSlider: {fileID: 0}
   playerIcon: {fileID: 0}
   myIcon: {fileID: -815980554519240943, guid: 919a4b63ccb4640e58ce5f01324d4581, type: 3}
-  cameraOffset: {x: 0, y: 0, z: -10}
 --- !u!114 &1420155586325692732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -408,4 +407,3 @@ MonoBehaviour:
   healthSlider: {fileID: 0}
   playerIcon: {fileID: 0}
   myIcon: {fileID: -815980554519240943, guid: 919a4b63ccb4640e58ce5f01324d4581, type: 3}
-  cameraOffset: {x: 0, y: 0, z: -10}

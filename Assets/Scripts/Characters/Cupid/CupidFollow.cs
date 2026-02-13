@@ -2,78 +2,72 @@ using UnityEngine;
 
 public class CupidFollow : MonoBehaviour
 {
-    [Header("Target")]
-    public Transform player;
+    [Header("Follow Settings")]
+    public Transform target;
+    public float followDistance = 2f;
+    public float followSpeed = 4f;
+    public float floatHeight = 1.5f;
+    public float floatSpeed = 2f;
 
-    [Header("Geofence Settings")]
-    public float fenceRadius = 3.0f;    // The "Leash" length
-    public float wanderRadius = 2.0f;   // How far it roams from the player
+    [Header("Cupid Data")]
+    public CupidData cupidData;
 
-    [Header("Movement")]
-    public float moveSpeed = 2.0f;      // Normal roaming speed
-    public float catchUpSpeed = 5.0f;   // Sprint speed when you run away
-    public float changePosTime = 2.0f;  // How often it picks a new spot
+    [Header("Auto Find Target")]
+    public bool autoFindActivePlayer = true;
 
-    private Vector2 targetPosition;
-    private float timer;
+    private Vector3 baseOffset;
+    private float floatTimer;
 
     void Start()
     {
-        // Start by going to the player
-        if (player != null) targetPosition = player.position;
+        baseOffset = new Vector3(followDistance, floatHeight, 0);
+        floatTimer = Random.Range(0f, Mathf.PI * 2f);
     }
 
     void Update()
     {
-        if (player == null) return;
-
-        // 1. Check distance to player
-        float distanceToPlayer = Vector2.Distance(transform.position, player.position);
-
-        // 2. LOGIC: Are we inside the fence or outside?
-        if (distanceToPlayer > fenceRadius)
+        if (autoFindActivePlayer)
         {
-            // --- OUTSIDE FENCE (Catch Up) ---
-            // Ignore wandering, just run directly to the player
-            transform.position = Vector2.MoveTowards(transform.position, player.position, catchUpSpeed * Time.deltaTime);
+            FindActivePlayer();
         }
-        else
-        {
-            // --- INSIDE FENCE (Roam Around) ---
-            // Move towards our current random wander spot
-            transform.position = Vector2.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
 
-            // Timer to pick a NEW random spot
-            timer -= Time.deltaTime;
-            if (timer <= 0)
+        if (target == null) return;
+
+        FollowPlayer();
+    }
+
+    void FindActivePlayer()
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject player in players)
+        {
+            SwitchCharacters sc = player.GetComponent<SwitchCharacters>();
+            if (sc != null && sc.isActive)
             {
-                PickNewRandomPos();
-                timer = changePosTime; // Reset timer
+                target = player.transform;
+                return;
             }
         }
     }
 
-    void PickNewRandomPos()
+    void FollowPlayer()
     {
-        // Pick a random point inside a circle around the PLAYER
-        // (Random.insideUnitCircle returns a point between 0,0 and 1,1)
-        Vector2 randomOffset = Random.insideUnitCircle * wanderRadius;
+        // bobbing float
+        floatTimer += Time.deltaTime * floatSpeed;
+        float floatOffset = Mathf.Sin(floatTimer) * 0.3f;
 
-        targetPosition = (Vector2)player.position + randomOffset;
-    }
+        // position behind and above player
+        Vector3 targetPosition = target.position + baseOffset + Vector3.up * floatOffset;
 
-    // Draw the "Fence" in the editor so you can see it
-    void OnDrawGizmosSelected()
-    {
-        if (player != null)
+        // smooth follow
+        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * followSpeed);
+
+        // face movement direction
+        Vector3 direction = targetPosition - transform.position;
+        if (direction.magnitude > 0.1f)
         {
-            // GREEN circle = The area it wanders in
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(player.position, wanderRadius);
-
-            // RED circle = The absolute limit (The Geofence)
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(player.position, fenceRadius);
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
         }
     }
 }
