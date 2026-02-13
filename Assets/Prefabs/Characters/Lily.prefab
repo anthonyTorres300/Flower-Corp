@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2465015852249132318}
   - component: {fileID: 2587061340692473253}
   - component: {fileID: 2978151333882110002}
-  - component: {fileID: 7831429854406516744}
   - component: {fileID: 6020491504656990521}
   - component: {fileID: 3403502476085118232}
   - component: {fileID: 1452535998715110910}
@@ -154,36 +153,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwitchCharacters
   moveSpeed: 5
-  followDistance: 2
   isActive: 0
+  wanderRadius: 3
+  leashDistance: 6
+  catchUpSpeedMult: 1.5
+  wanderWaitTime: {x: 1, y: 3}
   otherCharacter: {fileID: 0}
-  shootingScript: {fileID: 7831429854406516744}
+  shootingScript: {fileID: 0}
   healthSlider: {fileID: 0}
   playerIcon: {fileID: 0}
   myIcon: {fileID: 0}
   cameraOffset: {x: 0, y: 0, z: -10}
---- !u!114 &7831429854406516744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1276745889311749715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85a486181cfb1864395d97f111e9644e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LilyShooter
-  flowerProjectilePrefab: {fileID: 3855711452836690044, guid: 5d3a4da0ea3214067a25568df72cf93f, type: 3}
-  splatPrefab: {fileID: 0}
-  firePoint: {fileID: 7383264549324349049}
-  cam: {fileID: 0}
-  ammoBar: {fileID: 0}
-  flowerSpeed: 15
-  flowerColor: {r: 0.8709605, g: 1, b: 0, a: 1}
-  fireRate: 0.15
-  maxAmmo: 20
-  reloadTime: 1.5
 --- !u!114 &6020491504656990521
 MonoBehaviour:
   m_ObjectHideFlags: 0
