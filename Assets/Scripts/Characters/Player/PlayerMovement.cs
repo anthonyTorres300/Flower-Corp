@@ -20,8 +20,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        movement.x = Input.GetAxisRaw("Horizontal");
-        movement.y = Input.GetAxisRaw("Vertical");
+        float x = Input.GetAxisRaw("Horizontal");
+        float y = Input.GetAxisRaw("Vertical");
+
+        // Only apply movement if input is strong enough (ignore tiny drift)
+        if (Mathf.Abs(x) > 0.1f) movement.x = x; else movement.x = 0;
+        if (Mathf.Abs(y) > 0.1f) movement.y = y; else movement.y = 0;
 
         mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
     }
@@ -39,9 +43,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (cam != null)
         {
-            Vector3 desiredPosition = transform.position + cameraOffset;
-            Vector3 smoothedPosition = Vector3.Lerp(cam.transform.position, desiredPosition, smoothSpeed);
-            cam.transform.position = smoothedPosition;
+            Vector3 screenPos = Input.mousePosition;
+            screenPos.z = -cam.transform.position.z; // Set distance from camera to world
+            mousePos = cam.ScreenToWorldPoint(screenPos);
         }
     }
 }
