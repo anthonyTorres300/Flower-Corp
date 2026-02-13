@@ -11,6 +11,9 @@ public class CupidManager : MonoBehaviour
     public CosmosShoot cosmosWeapon;
     public LilyShooter lilyWeapon;
 
+    [Header("Wave System")]
+    public WaveManager waveManager;
+
     // base stats
     private float cosmosBaseFireRate;
     private int cosmosBaseDamage;
@@ -39,6 +42,12 @@ public class CupidManager : MonoBehaviour
     public void AddCupid(CupidData newCupid)
     {
         currentCupids.Add(newCupid);
+
+        // Notify wave manager that a cupid was saved!
+        if (waveManager != null)
+        {
+            waveManager.OnCupidSaved();
+        }
 
         // spawn cupid companion
         if (newCupid.cupidPrefab != null && cupidSpawnPoint != null)

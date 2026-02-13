@@ -34,6 +34,13 @@ public class Damageable : MonoBehaviour
     {
         onDeath?.Invoke();
 
+        // Notify wave manager
+        WaveManager waveManager = FindObjectOfType<WaveManager>();
+        if (waveManager != null)
+        {
+            waveManager.OnEnemyKilled();
+        }
+
         // Check if this is a CorruptedCupid and call OnEliminated if it exists
         CorruptedCupid corruptedCupid = GetComponent<CorruptedCupid>();
         if (corruptedCupid != null)

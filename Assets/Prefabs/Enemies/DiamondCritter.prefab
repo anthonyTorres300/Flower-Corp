@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2965498952206481057}
   - component: {fileID: 857643206787085467}
   - component: {fileID: 5308826581402218575}
+  - component: {fileID: -393993176155006314}
   m_Layer: 7
   m_Name: DiamondCritter
   m_TagString: Enemy
@@ -184,3 +185,20 @@ MonoBehaviour:
   chargeUpTime: 0.8
   dashDamage: 15
   spriteRenderer: {fileID: 0}
+--- !u!114 &-393993176155006314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4638991859977448884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b580d5abdbc4e7ef9ca4f1a56bda192, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Damageable
+  maxHealth: 10
+  currentHealth: 0
+  onDeath:
+    m_PersistentCalls:
+      m_Calls: []
