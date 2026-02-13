@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 7547234840717803754}
   - component: {fileID: 6980395742764347278}
   - component: {fileID: 4499720097323141154}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: LilyBullet
-  m_TagString: PlayerBullet
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,7 +84,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 0, b: 0.67422533, a: 1}
+  m_Color: {r: 1, g: 0.88125503, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

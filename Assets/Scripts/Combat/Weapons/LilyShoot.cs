@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI; // Required for UI
+using UnityEngine.UI;
 using System.Collections;
 
 public class LilyShooter : MonoBehaviour
@@ -11,23 +11,27 @@ public class LilyShooter : MonoBehaviour
     public Camera cam;
 
     [Header("UI Setup")]
-    public Image ammoBar; // Drag your Filled Image here
+    public Image ammoBar;
 
     [Header("Settings")]
-    public float flowerSpeed = 15f;
-    public Color flowerColor = Color.cyan;
-    public float fireRate = 0.15f;
-    private float nextFireTime;
+    public float flowerSpeed = 18f;
+    public Color teamColor = Color.cyan;
+    public float fireRate = 0.12f;
+
+    [Tooltip("How far the bullet travels before automatically splashing")]
+    public float maxRange = 10f;
 
     [Header("Ammo Stats")]
-    public int maxAmmo = 20;
-    public float reloadTime = 1.5f;
-    private int currentAmmo;
-    private bool isReloading = false;
+    public int maxAmmo = 40;
+    public float reloadTime = 1.2f;
+
+    private int _currentAmmo;
+    private float _nextFireTime;
+    private bool _isReloading;
 
     void Start()
     {
-        currentAmmo = maxAmmo;
+        _currentAmmo = maxAmmo;
         if (cam == null) cam = Camera.main;
         UpdateAmmoUI();
     }
@@ -35,22 +39,19 @@ public class LilyShooter : MonoBehaviour
     void Update()
     {
         RotateTowardsMouse();
-        UpdateAmmoUI();
 
-        if (isReloading) return;
+        if (_isReloading) return;
 
-        // Auto-reload if empty
-        if (currentAmmo <= 0)
+        if (Input.GetKeyDown(KeyCode.R) || _currentAmmo <= 0)
         {
             StartCoroutine(Reload());
             return;
         }
 
-        // Shoot input
-        if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
+        if (Input.GetMouseButton(0) && Time.time >= _nextFireTime)
         {
             Shoot();
-            nextFireTime = Time.time + fireRate;
+            _nextFireTime = Time.time + fireRate;
         }
     }
 
@@ -64,74 +65,112 @@ public class LilyShooter : MonoBehaviour
 
     void Shoot()
     {
-        currentAmmo--; // Reduce Ammo
+        _currentAmmo--;
+        UpdateAmmoUI();
 
-        GameObject projectile = Instantiate(flowerProjectilePrefab, firePoint.position, firePoint.rotation);
+        GameObject projGO = Instantiate(flowerProjectilePrefab, firePoint.position, firePoint.rotation);
 
-        SpriteRenderer sr = projectile.GetComponent<SpriteRenderer>();
-        if (sr != null) sr.color = flowerColor;
-
-        Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
-        if (rb == null) rb = projectile.AddComponent<Rigidbody2D>();
-
-        rb.gravityScale = 0;
-
-        // Note: linearVelocity is for Unity 6+. Use rb.velocity for older versions.
-        rb.linearVelocity = firePoint.up * flowerSpeed;
-
-        // This is the part that needs the class below!
-        FlowerCollision handler = projectile.AddComponent<FlowerCollision>();
-        handler.flowerPrefab = splatPrefab;
-        handler.flowerColor = flowerColor;
+        // Pass the maxRange to the collision logic
+        FlowerCollision projectileLogic = projGO.AddComponent<FlowerCollision>();
+        projectileLogic.Setup(splatPrefab, teamColor, firePoint.up * flowerSpeed, maxRange);
     }
 
     IEnumerator Reload()
     {
-        isReloading = true;
-        // Optional: Debug.Log("Reloading...");
-
+        _isReloading = true;
+        if (ammoBar != null) ammoBar.color = new Color(1, 1, 1, 0.5f);
         yield return new WaitForSeconds(reloadTime);
-
-        currentAmmo = maxAmmo;
-        isReloading = false;
+        _currentAmmo = maxAmmo;
+        _isReloading = false;
+        if (ammoBar != null) ammoBar.color = Color.white;
         UpdateAmmoUI();
     }
 
     void UpdateAmmoUI()
     {
-        if (ammoBar != null)
-        {
-            float fillAmount = (float)currentAmmo / maxAmmo;
-            ammoBar.fillAmount = fillAmount;
-        }
+        if (ammoBar != null) ammoBar.fillAmount = (float)_currentAmmo / maxAmmo;
     }
 }
 
-// ---------------------------------------------------------
-// THIS CLASS WAS MISSING BEFORE - IT MUST BE IN THE FILE
-// ---------------------------------------------------------
+// --- PROJECTILE & INK LOGIC ---
 public class FlowerCollision : MonoBehaviour
 {
-    public GameObject flowerPrefab;
-    public Color flowerColor;
+    private GameObject _splatPrefab;
+    private Color _paintColor;
+    private float _dropTimer;
+    private float _dropInterval = 0.05f;
+
+    private Vector2 _startPos;
+    private float _maxDistance;
+
+    public void Setup(GameObject splat, Color color, Vector2 velocity, float range)
+    {
+        _splatPrefab = splat;
+        _paintColor = color;
+        _maxDistance = range;
+        _startPos = transform.position;
+
+        if (TryGetComponent(out SpriteRenderer sr)) sr.color = color;
+
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb == null) rb = gameObject.AddComponent<Rigidbody2D>();
+
+        rb.gravityScale = 0;
+        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        rb.linearVelocity = velocity;
+
+        CircleCollider2D col = GetComponent<CircleCollider2D>();
+        if (col == null) col = gameObject.AddComponent<CircleCollider2D>();
+        col.isTrigger = true;
+
+        Destroy(gameObject, 5f);
+    }
+
+    void Update()
+    {
+        // 1. Trail logic
+        _dropTimer += Time.deltaTime;
+        if (_dropTimer >= _dropInterval)
+        {
+            SpawnPaint(0.45f);
+            _dropTimer = 0;
+        }
+
+        // 2. Range logic: Check distance from start point
+        float distanceTraveled = Vector2.Distance(_startPos, transform.position);
+        if (distanceTraveled >= _maxDistance)
+        {
+            HandleImpact();
+        }
+    }
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        // Impact logic for walls/ground
         if (other.CompareTag("Ground"))
         {
-            GameObject splat = Instantiate(
-                flowerPrefab,
-                transform.position,
-                Quaternion.Euler(0, 0, Random.Range(0, 360))
-            );
-
-            var sr = splat.GetComponent<SpriteRenderer>();
-            if (sr != null)
-                sr.color = flowerColor;
-
-            splat.transform.localScale *= Random.Range(0.6f, 1.3f);
-
-            Destroy(gameObject);
+            HandleImpact();
         }
+    }
+
+    void HandleImpact()
+    {
+        SpawnPaint(1.3f); // Large final splat
+        Destroy(gameObject);
+    }
+
+    void SpawnPaint(float scaleMult)
+    {
+        if (_splatPrefab == null) return;
+
+        GameObject splat = Instantiate(_splatPrefab, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
+
+        if (splat.TryGetComponent(out SpriteRenderer sr))
+        {
+            sr.color = _paintColor;
+            sr.sortingOrder = -1;
+        }
+
+        splat.transform.localScale *= Random.Range(0.8f, 1.2f) * scaleMult;
     }
 }
