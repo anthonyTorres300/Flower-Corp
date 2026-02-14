@@ -15,7 +15,7 @@ public class CorruptedCupid : MonoBehaviour
     public Transform firePoint;
 
     [Header("Debuff Type")]
-    public DebuffType debuffType = DebuffType.None;
+    public DebuffType debuffType = DebuffType.Poison;
 
     [Header("Visual")]
     public SpriteRenderer spriteRenderer;
