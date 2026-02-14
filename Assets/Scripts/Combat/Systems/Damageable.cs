@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Damageable : MonoBehaviour
 {
@@ -11,6 +12,13 @@ public class Damageable : MonoBehaviour
     public bool flashOnHit = true;
     public Color hitColor = Color.red;
     public float flashDuration = 0.1f;
+
+    [Header("Death Effects")] // --- NEW SECTION ---
+    public AudioClip deathSound;
+    [Tooltip("How much the camera shakes on death")]
+    public float shakeIntensity = 0.2f;
+    [Tooltip("How long the camera shakes on death")]
+    public float shakeDuration = 0.2f;
 
     [Header("Drops")]
     public GameObject[] dropItems;
@@ -33,24 +41,22 @@ public class Damageable : MonoBehaviour
     {
         currentHealth -= amount;
 
-        Debug.Log($"[DAMAGE] {gameObject.name} took {amount} damage. Health: {currentHealth}/{maxHealth}");
-
-        // Visual feedback
+        // Visual feedback for every hit
         if (flashOnHit)
         {
             StartCoroutine(FlashRed());
         }
 
+        // Check for death
         if (currentHealth <= 0)
         {
             Die();
         }
     }
 
-    System.Collections.IEnumerator FlashRed()
+    IEnumerator FlashRed()
     {
         if (spriteRenderer == null) yield break;
-
         spriteRenderer.color = hitColor;
         yield return new WaitForSeconds(flashDuration);
         spriteRenderer.color = originalColor;
@@ -58,28 +64,39 @@ public class Damageable : MonoBehaviour
 
     void Die()
     {
-        Debug.Log($"[DEATH] {gameObject.name} died");
+        // 1. Play Death Sound
+        // We use PlayClipAtPoint so the sound finishes even after the object is destroyed
+        if (deathSound != null)
+        {
+            AudioSource.PlayClipAtPoint(deathSound, transform.position);
+        }
 
-        // Drop items
+        // 2. Trigger Camera Shake
+        // This looks for the CameraShake script on your Main Camera
+        if (Camera.main != null)
+        {
+            CameraShake shake = Camera.main.GetComponent<CameraShake>();
+            if (shake != null)
+            {
+                shake.TriggerShake(shakeDuration, shakeIntensity);
+            }
+        }
+
+        // 3. Drop items
         if (dropItems.Length > 0 && Random.value <= dropChance)
         {
             GameObject drop = dropItems[Random.Range(0, dropItems.Length)];
             Instantiate(drop, transform.position, Quaternion.identity);
         }
 
+        // Final cleanup
         Destroy(gameObject);
     }
 
-    // Public method to check if alive
-    public bool IsAlive()
-    {
-        return currentHealth > 0;
-    }
+    public bool IsAlive() => currentHealth > 0;
 
-    // Public method to heal
     public void Heal(int amount)
     {
         currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
-        Debug.Log($"[HEAL] {gameObject.name} healed {amount}. Health: {currentHealth}/{maxHealth}");
     }
 }

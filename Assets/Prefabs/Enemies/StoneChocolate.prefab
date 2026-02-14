@@ -105,6 +105,9 @@ MonoBehaviour:
   flashOnHit: 1
   hitColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
+  deathSound: {fileID: 8300000, guid: 82a7430933804447093c9ebc97b056fa, type: 3}
+  shakeIntensity: 0.2
+  shakeDuration: 0.2
   dropItems: []
   dropChance: 0.3
 --- !u!61 &8901140433895067629
@@ -145,7 +148,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 6.4, y: 6.4}
+    oldSize: {x: 1.6, y: 1.6}
     newSize: {x: 6.4, y: 6.4}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

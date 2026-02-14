@@ -1,7 +1,8 @@
 using UnityEngine;
 using System.Collections;
-using UnityEngine.UI; // Needed for Image
+using UnityEngine.UI;
 
+[RequireComponent(typeof(AudioSource))] // Ensures the object has an AudioSource
 public class CosmosWeapon : MonoBehaviour
 {
     public enum WeaponType { Pistol, MachineGun, Shotgun, Sniper }
@@ -13,23 +14,30 @@ public class CosmosWeapon : MonoBehaviour
 
     [Header("Visual Setup (In-Game)")]
     [Tooltip("The SpriteRenderer on the player that holds the gun")]
-    public SpriteRenderer weaponRenderer; 
+    public SpriteRenderer weaponRenderer;
 
-    // --- NEW SECTION: UI SPECIFIC ---
     [Header("UI Setup")]
     [Tooltip("The UI Image on your Canvas that shows the current weapon icon")]
-    public Image weaponIconDisplay; 
-    public Image ammoBar; 
+    public Image weaponIconDisplay;
+    public Image ammoBar;
+
+    [Header("Audio Setup")] // --- NEW SECTION ---
+    public AudioSource audioSource;
+    [Range(0f, 0.2f)] public float pitchVariation = 0.05f; // Makes guns sound less robotic
+    
+    [Space(5)]
+    public AudioClip pistolSFX;
+    public AudioClip machineGunSFX;
+    public AudioClip shotgunSFX;
+    public AudioClip sniperSFX;
 
     [Header("Art: In-Game Sprites")]
-    [Tooltip("The sprite the player actually holds")]
     public Sprite pistolWorldSprite;
     public Sprite machineGunWorldSprite;
     public Sprite shotgunWorldSprite;
     public Sprite sniperWorldSprite;
 
     [Header("Art: UI Icons")]
-    [Tooltip("The icon that appears in the UI (can be different from the in-game sprite)")]
     public Sprite pistolUIIcon;
     public Sprite machineGunUIIcon;
     public Sprite shotgunUIIcon;
@@ -38,7 +46,6 @@ public class CosmosWeapon : MonoBehaviour
     [Header("Weapon Configuration")]
     public WeaponType currentWeapon;
     [HideInInspector] public WeaponType lastWeaponType;
-
     [HideInInspector] public bool isInputLocked = false;
 
     // Stats (Auto-Updated)
@@ -52,7 +59,10 @@ public class CosmosWeapon : MonoBehaviour
     private int currentAmmo;
     private bool isReloading = false;
     private float nextFireTime = 0f;
-    
+
+    // --- NEW VARIABLE: Holds the sound for the currently equipped gun ---
+    private AudioClip currentShootClip; 
+
     public float rotationOffset = 0f;
 
     void OnValidate()
@@ -68,6 +78,9 @@ public class CosmosWeapon : MonoBehaviour
     {
         if (cam == null) cam = Camera.main;
         if (weaponRenderer == null) weaponRenderer = GetComponent<SpriteRenderer>();
+        
+        // Grab AudioSource if not manually assigned
+        if (audioSource == null) audioSource = GetComponent<AudioSource>();
 
         EquipWeapon(currentWeapon);
     }
@@ -102,6 +115,7 @@ public class CosmosWeapon : MonoBehaviour
     IEnumerator Reload()
     {
         isReloading = true;
+        // Optional: You could add a Reload Sound here in the future
         yield return new WaitForSeconds(reloadTime);
         currentAmmo = maxAmmo;
         isReloading = false;
@@ -122,10 +136,7 @@ public class CosmosWeapon : MonoBehaviour
 
         if (weaponRenderer != null)
         {
-            if (Mathf.Abs(angle) > 90)
-                weaponRenderer.flipY = true;
-            else
-                weaponRenderer.flipY = false;
+            weaponRenderer.flipY = Mathf.Abs(angle) > 90;
         }
     }
 
@@ -148,6 +159,9 @@ public class CosmosWeapon : MonoBehaviour
         {
             nextFireTime = Time.time + fireRate;
             currentAmmo--;
+            
+            // --- PLAY SOUND ---
+            PlayShootSound();
 
             if (currentWeapon == WeaponType.Shotgun)
             {
@@ -157,6 +171,19 @@ public class CosmosWeapon : MonoBehaviour
             {
                 FireSpread(1, spread);
             }
+        }
+    }
+
+    // --- NEW HELPER METHOD FOR AUDIO ---
+    void PlayShootSound()
+    {
+        if (audioSource != null && currentShootClip != null)
+        {
+            // Randomize pitch slightly for realism
+            audioSource.pitch = Random.Range(1f - pitchVariation, 1f + pitchVariation);
+            
+            // PlayOneShot allows sounds to overlap (good for machine guns)
+            audioSource.PlayOneShot(currentShootClip);
         }
     }
 
@@ -200,31 +227,35 @@ public class CosmosWeapon : MonoBehaviour
         Sprite worldSprite = null;
         Sprite uiIcon = null;
 
-        // 1. SET STATS & SELECT SPRITES
+        // 1. SET STATS, SPRITES, AND AUDIO
         switch (type)
         {
             case WeaponType.Pistol:
                 fireRate = 0.4f; spread = 2f; projectileCount = 1; bulletSpeed = 20f; maxAmmo = 12; reloadTime = 1f;
                 worldSprite = pistolWorldSprite;
                 uiIcon = pistolUIIcon;
+                currentShootClip = pistolSFX; // Assign Pistol Audio
                 break;
 
             case WeaponType.MachineGun:
                 fireRate = 0.1f; spread = 12f; projectileCount = 1; bulletSpeed = 22f; maxAmmo = 30; reloadTime = 2.5f;
                 worldSprite = machineGunWorldSprite;
                 uiIcon = machineGunUIIcon;
+                currentShootClip = machineGunSFX; // Assign MG Audio
                 break;
 
             case WeaponType.Shotgun:
                 fireRate = 0.8f; spread = 35f; projectileCount = 5; bulletSpeed = 18f; maxAmmo = 5; reloadTime = 1.5f;
                 worldSprite = shotgunWorldSprite;
                 uiIcon = shotgunUIIcon;
+                currentShootClip = shotgunSFX; // Assign Shotgun Audio
                 break;
 
             case WeaponType.Sniper:
                 fireRate = 1.5f; spread = 0f; projectileCount = 1; bulletSpeed = 45f; maxAmmo = 5; reloadTime = 3.0f;
                 worldSprite = sniperWorldSprite;
                 uiIcon = sniperUIIcon;
+                currentShootClip = sniperSFX; // Assign Sniper Audio
                 break;
         }
 

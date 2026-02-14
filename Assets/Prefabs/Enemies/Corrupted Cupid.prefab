@@ -573,6 +573,9 @@ MonoBehaviour:
   flashOnHit: 1
   hitColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
+  deathSound: {fileID: 8300000, guid: 82a7430933804447093c9ebc97b056fa, type: 3}
+  shakeIntensity: 0.2
+  shakeDuration: 0.2
   dropItems: []
   dropChance: 0.3
 --- !u!114 &3402603166497441801
