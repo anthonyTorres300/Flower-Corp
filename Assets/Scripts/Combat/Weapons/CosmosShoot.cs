@@ -1,42 +1,58 @@
 using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
+using UnityEngine.UI; // Needed for Image
 
 public class CosmosWeapon : MonoBehaviour
 {
-    public enum WeaponType { Pistol, MachineGun, Shotgun, Sniper, BurstRifle }
+    public enum WeaponType { Pistol, MachineGun, Shotgun, Sniper }
 
     [Header("Setup")]
     public Transform firePoint;
     public GameObject bulletPrefab;
     public Camera cam;
 
+    [Header("Visual Setup (In-Game)")]
+    [Tooltip("The SpriteRenderer on the player that holds the gun")]
+    public SpriteRenderer weaponRenderer; 
+
+    // --- NEW SECTION: UI SPECIFIC ---
     [Header("UI Setup")]
-    public Image ammoBar;
+    [Tooltip("The UI Image on your Canvas that shows the current weapon icon")]
+    public Image weaponIconDisplay; 
+    public Image ammoBar; 
+
+    [Header("Art: In-Game Sprites")]
+    [Tooltip("The sprite the player actually holds")]
+    public Sprite pistolWorldSprite;
+    public Sprite machineGunWorldSprite;
+    public Sprite shotgunWorldSprite;
+    public Sprite sniperWorldSprite;
+
+    [Header("Art: UI Icons")]
+    [Tooltip("The icon that appears in the UI (can be different from the in-game sprite)")]
+    public Sprite pistolUIIcon;
+    public Sprite machineGunUIIcon;
+    public Sprite shotgunUIIcon;
+    public Sprite sniperUIIcon;
 
     [Header("Weapon Configuration")]
     public WeaponType currentWeapon;
     [HideInInspector] public WeaponType lastWeaponType;
 
-    // --- NEW VARIABLE ---
-    // This allows the WeaponSelector script to stop us from shooting while in the menu
     [HideInInspector] public bool isInputLocked = false;
 
-    [Header("Stats (Auto-Updates)")]
-    public float bulletSpeed = 20f;
-    public float fireRate = 0.5f;
-    public float spread = 0f;
-    public int projectileCount = 1;
+    // Stats (Auto-Updated)
+    [HideInInspector] public float bulletSpeed;
+    [HideInInspector] public float fireRate;
+    [HideInInspector] public float spread;
+    [HideInInspector] public int projectileCount;
+    [HideInInspector] public int maxAmmo;
+    [HideInInspector] public float reloadTime;
 
-    [Header("Ammo Stats")]
-    public int maxAmmo = 10;
-    public float reloadTime = 1.5f;
     private int currentAmmo;
     private bool isReloading = false;
     private float nextFireTime = 0f;
-
-    [Header("Adjustments")]
-    // IF YOUR GUN POINTS WRONG: Change this to -90, 90, or 180
+    
     public float rotationOffset = 0f;
 
     void OnValidate()
@@ -50,14 +66,14 @@ public class CosmosWeapon : MonoBehaviour
 
     void Start()
     {
-        if (cam == null) cam = Camera.main; // Auto-find camera
+        if (cam == null) cam = Camera.main;
+        if (weaponRenderer == null) weaponRenderer = GetComponent<SpriteRenderer>();
+
         EquipWeapon(currentWeapon);
     }
 
     void Update()
     {
-        // --- NEW CHECK ---
-        // If input is locked (menu is open), do nothing.
         if (isInputLocked) return;
 
         UpdateAmmoUI();
@@ -86,35 +102,31 @@ public class CosmosWeapon : MonoBehaviour
     IEnumerator Reload()
     {
         isReloading = true;
-        // Debug.Log("Reloading..."); 
         yield return new WaitForSeconds(reloadTime);
         currentAmmo = maxAmmo;
         isReloading = false;
-        // Debug.Log("Reload Complete!");
     }
 
     void HandleAiming()
     {
         if (cam == null) return;
 
-        // 1. Get Mouse Position correctly
-        // We set z to -cam.transform.position.z to ensure distance is calculated from the camera plane
         Vector3 mouseScreenPosition = Input.mousePosition;
         mouseScreenPosition.z = -cam.transform.position.z;
 
         Vector3 mouseWorldPosition = cam.ScreenToWorldPoint(mouseScreenPosition);
-
-        // 2. Calculate Direction
         Vector3 lookDir = mouseWorldPosition - transform.position;
 
-        // 3. Calculate Angle
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
-
-        // 4. Apply Rotation (Adding the offset here)
         transform.rotation = Quaternion.Euler(0, 0, angle + rotationOffset);
 
-        // DEBUG: Draw a line in the Scene view to show where the math thinks we are aiming
-        Debug.DrawLine(transform.position, mouseWorldPosition, Color.red);
+        if (weaponRenderer != null)
+        {
+            if (Mathf.Abs(angle) > 90)
+                weaponRenderer.flipY = true;
+            else
+                weaponRenderer.flipY = false;
+        }
     }
 
     void HandleShooting()
@@ -137,17 +149,13 @@ public class CosmosWeapon : MonoBehaviour
             nextFireTime = Time.time + fireRate;
             currentAmmo--;
 
-            switch (currentWeapon)
+            if (currentWeapon == WeaponType.Shotgun)
             {
-                case WeaponType.BurstRifle:
-                    StartCoroutine(FireBurst());
-                    break;
-                case WeaponType.Shotgun:
-                    FireSpread(projectileCount, spread);
-                    break;
-                default:
-                    FireSpread(1, spread);
-                    break;
+                FireSpread(projectileCount, spread);
+            }
+            else
+            {
+                FireSpread(1, spread);
             }
         }
     }
@@ -166,34 +174,19 @@ public class CosmosWeapon : MonoBehaviour
             else
                 currentSpread = -centeringOffset + (angleStep * i);
 
-            // We pass the spread rotation to the bullet spawner
             Quaternion spreadRotation = Quaternion.Euler(0, 0, currentSpread);
             SpawnBullet(spreadRotation);
         }
     }
 
-    IEnumerator FireBurst()
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            SpawnBullet(Quaternion.identity);
-            yield return new WaitForSeconds(0.08f);
-        }
-    }
-
     void SpawnBullet(Quaternion spreadRotation)
     {
-        // 1. Calculate the final rotation: FirePoint rotation + Spread
         Quaternion finalRotation = firePoint.rotation * spreadRotation;
-
-        // 2. Instantiate bullet
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, finalRotation);
 
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         if (rb != null)
         {
-            // IMPORTANT: We use the bullet's own "Right" vector (Red Arrow) 
-            // because we just rotated the bullet to face the correct way.
             rb.AddForce(bullet.transform.right * bulletSpeed, ForceMode2D.Impulse);
         }
 
@@ -203,22 +196,53 @@ public class CosmosWeapon : MonoBehaviour
     public void EquipWeapon(WeaponType type)
     {
         currentWeapon = type;
-        currentAmmo = maxAmmo;
+        
+        Sprite worldSprite = null;
+        Sprite uiIcon = null;
 
+        // 1. SET STATS & SELECT SPRITES
         switch (type)
         {
             case WeaponType.Pistol:
-                fireRate = 0.4f; spread = 2f; projectileCount = 1; bulletSpeed = 20f; maxAmmo = 12; reloadTime = 1f; break;
+                fireRate = 0.4f; spread = 2f; projectileCount = 1; bulletSpeed = 20f; maxAmmo = 12; reloadTime = 1f;
+                worldSprite = pistolWorldSprite;
+                uiIcon = pistolUIIcon;
+                break;
+
             case WeaponType.MachineGun:
-                fireRate = 0.1f; spread = 12f; projectileCount = 1; bulletSpeed = 22f; maxAmmo = 30; reloadTime = 2.5f; break;
+                fireRate = 0.1f; spread = 12f; projectileCount = 1; bulletSpeed = 22f; maxAmmo = 30; reloadTime = 2.5f;
+                worldSprite = machineGunWorldSprite;
+                uiIcon = machineGunUIIcon;
+                break;
+
             case WeaponType.Shotgun:
-                fireRate = 0.8f; spread = 35f; projectileCount = 5; bulletSpeed = 18f; maxAmmo = 5; reloadTime = 1.5f; break;
+                fireRate = 0.8f; spread = 35f; projectileCount = 5; bulletSpeed = 18f; maxAmmo = 5; reloadTime = 1.5f;
+                worldSprite = shotgunWorldSprite;
+                uiIcon = shotgunUIIcon;
+                break;
+
             case WeaponType.Sniper:
-                fireRate = 1.5f; spread = 0f; projectileCount = 1; bulletSpeed = 45f; maxAmmo = 5; reloadTime = 3.0f; break;
-            case WeaponType.BurstRifle:
-                fireRate = 0.6f; spread = 1f; projectileCount = 1; bulletSpeed = 25f; maxAmmo = 15; reloadTime = 2.0f; break;
+                fireRate = 1.5f; spread = 0f; projectileCount = 1; bulletSpeed = 45f; maxAmmo = 5; reloadTime = 3.0f;
+                worldSprite = sniperWorldSprite;
+                uiIcon = sniperUIIcon;
+                break;
         }
+
+        // 2. UPDATE WORLD SPRITE (In Hand)
+        if (weaponRenderer != null && worldSprite != null)
+        {
+            weaponRenderer.sprite = worldSprite;
+        }
+
+        // 3. UPDATE UI ICON (On Screen)
+        if (weaponIconDisplay != null && uiIcon != null)
+        {
+            weaponIconDisplay.sprite = uiIcon;
+            weaponIconDisplay.preserveAspect = true; 
+        }
+
         currentAmmo = maxAmmo;
+        UpdateAmmoUI();
     }
 
     public void AddAmmo(int amount)
