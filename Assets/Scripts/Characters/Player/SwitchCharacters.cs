@@ -7,6 +7,10 @@ public class SwitchCharacters : MonoBehaviour
     public float moveSpeed = 5f;
     public bool isActive = false;
 
+    [Header("Camera Settings")]
+    public float cameraSmoothSpeed = 5f; // Higher = snappier, Lower = smoother
+    public Vector3 cameraOffset = new Vector3(0, 0, -10);
+
     [Header("Dynamic AI Settings")]
     public float wanderRadius = 3f;      // How far they can roam from the player
     public float leashDistance = 6f;     // If player gets this far, AI sprints back
@@ -26,11 +30,10 @@ public class SwitchCharacters : MonoBehaviour
 
     private Rigidbody2D rb;
     private Camera cam;
-    // private PlayerHealth health; // Commented out as I don't have this script, uncomment in your project
+    // private PlayerHealth health; // Uncomment if you have the health script
 
     private static float lastSwitchTime;
     private Transform camTransform;
-    public Vector3 cameraOffset = new Vector3(0, 0, -10);
 
     // AI State Variables
     private Vector2 currentWanderTarget;
@@ -41,7 +44,11 @@ public class SwitchCharacters : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         cam = Camera.main;
-        camTransform = Camera.main.transform;
+        if (cam != null)
+        {
+            camTransform = cam.transform;
+        }
+        
         // health = GetComponent<PlayerHealth>(); 
 
         UpdateShootingState();
@@ -50,7 +57,8 @@ public class SwitchCharacters : MonoBehaviour
         {
             UpdateHealthUI();
             UpdatePlayerIcon();
-            MoveCameraToMe();
+            // We don't need to call a camera function here anymore; 
+            // LateUpdate handles it automatically every frame.
         }
     }
 
@@ -70,9 +78,27 @@ public class SwitchCharacters : MonoBehaviour
         }
         else
         {
-            HandleDynamicAI(); // New AI Logic
+            HandleDynamicAI(); 
         }
     }
+
+    // --- NEW CAMERA LOGIC ---
+    // LateUpdate runs after Update and FixedUpdate. 
+    // This is the standard place for camera following code to prevent jitter.
+    void LateUpdate()
+    {
+        // Only the active character controls the camera
+        if (isActive && camTransform != null)
+        {
+            // Calculate where the camera should be (Player position + Offset)
+            Vector3 targetPosition = transform.position + cameraOffset;
+
+            // Smoothly move the camera from where it is now -> to the target
+            // This handles BOTH following the player AND the "swoosh" effect when switching
+            camTransform.position = Vector3.Lerp(camTransform.position, targetPosition, Time.deltaTime * cameraSmoothSpeed);
+        }
+    }
+    // ------------------------
 
     void HandlePlayerInput()
     {
@@ -90,7 +116,7 @@ public class SwitchCharacters : MonoBehaviour
         rb.rotation = angle;
     }
 
-    // --- NEW DYNAMIC AI ---
+    // --- DYNAMIC AI ---
     void HandleDynamicAI()
     {
         if (otherCharacter == null) return;
@@ -98,57 +124,44 @@ public class SwitchCharacters : MonoBehaviour
         float distToPlayer = Vector2.Distance(transform.position, otherCharacter.transform.position);
 
         // STATE 1: CATCH UP (Leashing)
-        // If we are too far, ignore wandering and run to the player
         if (distToPlayer > leashDistance)
         {
             Vector2 direction = (otherCharacter.transform.position - transform.position).normalized;
-
-            // Move faster to catch up
             rb.linearVelocity = direction * (moveSpeed * catchUpSpeedMult);
-
-            // Look at player while running
             RotateTowards(direction);
-
-            // Reset wander state so we pick a new spot once we arrive
             isWandering = false;
             return;
         }
 
-        // STATE 2: WANDERING / IDLING
-        // If we are currently waiting...
+        // STATE 2: IDLING
         if (!isWandering && Time.time < nextWanderTime)
         {
-            rb.linearVelocity = Vector2.zero; // Stand still
-
-            // Optional: Slowly rotate to look at player while idle
+            rb.linearVelocity = Vector2.zero; 
             Vector2 dirToPlayer = (otherCharacter.transform.position - transform.position).normalized;
-            RotateTowards(dirToPlayer, 2f); // Slow rotation
+            RotateTowards(dirToPlayer, 2f); // Slow rotation look at player
             return;
         }
 
-        // If we need a new target...
+        // STATE 3: PICK NEW TARGET
         if (!isWandering && Time.time >= nextWanderTime)
         {
             PickNewWanderTarget();
         }
 
-        // Move to the wander target
+        // STATE 4: MOVING TO TARGET
         if (isWandering)
         {
             float distToTarget = Vector2.Distance(transform.position, currentWanderTarget);
 
-            // If we haven't reached the target yet
             if (distToTarget > 0.5f)
             {
                 Vector2 direction = (currentWanderTarget - (Vector2)transform.position).normalized;
-
-                // Wander at 60% speed for a more relaxed feel
-                rb.linearVelocity = direction * (moveSpeed * 0.6f);
+                rb.linearVelocity = direction * (moveSpeed * 0.6f); // 60% speed for wandering
                 RotateTowards(direction);
             }
             else
             {
-                // We arrived! Start waiting.
+                // Arrived
                 isWandering = false;
                 nextWanderTime = Time.time + Random.Range(wanderWaitTime.x, wanderWaitTime.y);
                 rb.linearVelocity = Vector2.zero;
@@ -158,8 +171,6 @@ public class SwitchCharacters : MonoBehaviour
 
     void PickNewWanderTarget()
     {
-        // Pick a random point inside a circle around the PLAYER (not ourselves)
-        // This ensures they stick close to the player but explore the immediate area
         Vector2 randomOffset = Random.insideUnitCircle * wanderRadius;
         currentWanderTarget = (Vector2)otherCharacter.transform.position + randomOffset;
         isWandering = true;
@@ -171,20 +182,20 @@ public class SwitchCharacters : MonoBehaviour
         rb.rotation = Mathf.LerpAngle(rb.rotation, angle, Time.deltaTime * speed);
     }
 
-    // --- VISUALIZATION (Draws circles in Editor) ---
+    // --- VISUALIZATION ---
     void OnDrawGizmos()
     {
         if (isActive || otherCharacter == null) return;
 
-        // Draw the Leash Distance (Red)
+        // Draw Leash
         Gizmos.color = new Color(1, 0, 0, 0.2f);
         Gizmos.DrawWireSphere(otherCharacter.transform.position, leashDistance);
 
-        // Draw the Wander Radius (Green)
+        // Draw Wander Radius
         Gizmos.color = new Color(0, 1, 0, 0.2f);
         Gizmos.DrawWireSphere(otherCharacter.transform.position, wanderRadius);
 
-        // Draw line to current target
+        // Draw Target
         if (isWandering)
         {
             Gizmos.color = Color.blue;
@@ -192,28 +203,32 @@ public class SwitchCharacters : MonoBehaviour
             Gizmos.DrawSphere(currentWanderTarget, 0.3f);
         }
     }
-    // ------------------------------------------------
 
     void PerformSwitch()
     {
         lastSwitchTime = Time.time;
 
+        // Deactivate THIS character
         isActive = false;
         UpdateShootingState();
+        rb.linearVelocity = Vector2.zero; // Stop moving immediately
 
-        // Stop moving immediately when switching to AI mode
-        rb.linearVelocity = Vector2.zero;
-
+        // Activate OTHER character
         if (otherCharacter != null)
         {
             otherCharacter.isActive = true;
             otherCharacter.UpdateShootingState();
 
+            // Pass UI references to the new active character
             otherCharacter.healthSlider = healthSlider;
             otherCharacter.playerIcon = playerIcon;
 
             otherCharacter.UpdatePlayerIcon();
-            otherCharacter.MoveCameraToMe();
+            
+            // Note: We do NOT need to call a camera function here.
+            // Since 'otherCharacter.isActive' is now true, the 
+            // LateUpdate loop on *that* script will automatically 
+            // start pulling the camera towards it.
         }
     }
 
@@ -237,35 +252,6 @@ public class SwitchCharacters : MonoBehaviour
         if (shootingScript != null)
         {
             shootingScript.enabled = isActive;
-        }
-    }
-
-    void MoveCameraToMe()
-    {
-        if (camTransform != null)
-        {
-            StopAllCoroutines();
-            StartCoroutine(SmoothCameraMove());
-        }
-    }
-
-    System.Collections.IEnumerator SmoothCameraMove()
-    {
-        Vector3 start = camTransform.position;
-        // Ensure we maintain the Z offset correctly during the lerp
-        Vector3 target = transform.position;
-        target.z = cameraOffset.z;
-
-        float t = 0;
-
-        while (t < 1)
-        {
-            t += Time.deltaTime * 6f;
-            Vector3 currentPos = Vector3.Lerp(start, target, t);
-            // Re-apply Z offset explicitly to avoid clipping
-            currentPos.z = cameraOffset.z;
-            camTransform.position = currentPos;
-            yield return null;
         }
     }
 }

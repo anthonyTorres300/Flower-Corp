@@ -3046,6 +3046,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SwitchCharacters
   moveSpeed: 5
   isActive: 1
+  cameraSmoothSpeed: 5
+  cameraOffset: {x: 0, y: 0, z: -10}
   wanderRadius: 3
   leashDistance: 6
   catchUpSpeedMult: 1.5
@@ -3055,7 +3057,6 @@ MonoBehaviour:
   healthSlider: {fileID: 429438348}
   playerIcon: {fileID: 1057188805}
   myIcon: {fileID: -815980554519240943, guid: 919a4b63ccb4640e58ce5f01324d4581, type: 3}
-  cameraOffset: {x: 0, y: 0, z: -10}
 --- !u!4 &980044454 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8720558266839970877, guid: ad393699577c3429ab6c83125975848f, type: 3}
