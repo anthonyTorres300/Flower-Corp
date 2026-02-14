@@ -438,7 +438,7 @@ MonoBehaviour:
   - text: 'Failure is not an option. '
     image: {fileID: 21300000, guid: 458967e36fbd84c069ad6d684f78cf6e, type: 3}
     durationAfterText: 1
-  nextSceneName: TitleScreen
+  nextSceneName: Gameplay
 --- !u!114 &446464739
 MonoBehaviour:
   m_ObjectHideFlags: 0
