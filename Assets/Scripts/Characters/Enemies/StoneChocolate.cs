@@ -238,6 +238,21 @@ public class StoneChocolate : MonoBehaviour
             }
         }
     }
+
+    void OnDestroy()
+    {
+        // Clean up halves if chocolate dies while split
+        if (topHalf != null)
+        {
+            Destroy(topHalf);
+            Debug.Log($"[CLEANUP] Destroyed top half of {gameObject.name}");
+        }
+        if (bottomHalf != null)
+        {
+            Destroy(bottomHalf);
+            Debug.Log($"[CLEANUP] Destroyed bottom half of {gameObject.name}");
+        }
+    }
 }
 
 // Helper component for chocolate halves
